@@ -4,8 +4,13 @@ import com.kez.picker.util.TimePeriod
 import kotlinx.datetime.LocalTime
 
 /**
- * 시간 형식화를 위한 확장 함수 - 12시간제
+ * Sample-wide display strings.
+ *
+ * These are intentionally English-only. The sample ships a Web (Wasm) target whose bundled font
+ * has no CJK glyphs, so non-Latin sample text renders as missing-glyph boxes in the browser demo
+ * and in the screenshots generated from it.
  */
+
 internal fun formatTime12(hour: Int?, minute: Int?, period: TimePeriod?): String {
     val h = hour ?: 12
     val m = minute ?: 0
@@ -20,46 +25,40 @@ internal fun formatTime12(time: LocalTime): String {
     return formatTime12(displayHour, time.minute, period)
 }
 
-/**
- * 시간 형식화를 위한 확장 함수 - 24시간제
- */
 internal fun formatTime24(hour: Int?, minute: Int?): String {
     val h = hour ?: 0
     val m = minute ?: 0
     return "${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}"
 }
 
-/**
- * 월 이름 가져오기 함수
- */
 internal fun getMonthName(month: Int): String {
     return when (month) {
-        1 -> "1월 (Jan)"
-        2 -> "2월 (Feb)"
-        3 -> "3월 (Mar)"
-        4 -> "4월 (Apr)"
-        5 -> "5월 (May)"
-        6 -> "6월 (Jun)"
-        7 -> "7월 (Jul)"
-        8 -> "8월 (Aug)"
-        9 -> "9월 (Sep)"
-        10 -> "10월 (Oct)"
-        11 -> "11월 (Nov)"
-        12 -> "12월 (Dec)"
-        else -> "알 수 없음"
+        1 -> "Jan"
+        2 -> "Feb"
+        3 -> "Mar"
+        4 -> "Apr"
+        5 -> "May"
+        6 -> "Jun"
+        7 -> "Jul"
+        8 -> "Aug"
+        9 -> "Sep"
+        10 -> "Oct"
+        11 -> "Nov"
+        12 -> "Dec"
+        else -> "Unknown"
     }
 }
 
 internal fun getMonthContentDescription(month: Int): String {
     return when (month) {
-        in 1..12 -> "${month}월"
-        else -> "알 수 없음"
+        in 1..12 -> "${getMonthName(month)}, month $month"
+        else -> "Unknown month"
     }
 }
 
 internal fun getTimePeriodContentDescription(period: TimePeriod): String {
     return when (period) {
-        TimePeriod.AM -> "오전"
-        TimePeriod.PM -> "오후"
+        TimePeriod.AM -> "AM"
+        TimePeriod.PM -> "PM"
     }
 }

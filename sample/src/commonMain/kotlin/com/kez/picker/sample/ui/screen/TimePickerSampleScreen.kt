@@ -77,7 +77,7 @@ internal fun TimePickerSampleScreen(
         char(':')
         minute(padding = Padding.ZERO)
         char(' ')
-        amPmMarker(am = "오전", pm = "오후")
+        amPmMarker(am = "AM", pm = "PM")
     }
 
     val ktxTimeFormat24 = LocalTime.Format {
@@ -181,8 +181,8 @@ internal fun TimePickerSampleScreen(
                             hourItemText = { it.toString().padStart(2, '0') },
                             minuteItemText = { it.toString().padStart(2, '0') },
                             periodItemText = { getTimePeriodContentDescription(it) },
-                            hourItemContentDescription = { "${it}시" },
-                            minuteItemContentDescription = { "${it}분" },
+                            hourItemContentDescription = { "$it hour" },
+                            minuteItemContentDescription = { "$it minute" },
                             periodItemContentDescription = { getTimePeriodContentDescription(it) }
                         ),
                         // Demonstrates rendering the 12-hour picker as hour, minute, then period.
@@ -194,11 +194,11 @@ internal fun TimePickerSampleScreen(
                             )
                         ),
                         semantics = PickerDefaults.timePickerSemantics(
-                            hourPickerLabel = "시간",
-                            minutePickerLabel = "분",
-                            periodPickerLabel = "오전/오후",
-                            previousItemActionLabel = "이전 항목 선택",
-                            nextItemActionLabel = "다음 항목 선택"
+                            hourPickerLabel = "Hour",
+                            minutePickerLabel = "Minute",
+                            periodPickerLabel = "AM/PM",
+                            previousItemActionLabel = "Select previous value",
+                            nextItemActionLabel = "Select next value"
                         )
                     )
                 } else {
@@ -213,15 +213,15 @@ internal fun TimePickerSampleScreen(
                         format = PickerDefaults.timePickerFormat(
                             hourItemText = { it.toString().padStart(2, '0') },
                             minuteItemText = { it.toString().padStart(2, '0') },
-                            hourItemContentDescription = { "${it}시" },
-                            minuteItemContentDescription = { "${it}분" }
+                            hourItemContentDescription = { "$it hour" },
+                            minuteItemContentDescription = { "$it minute" }
                         ),
                         style = PickerDefaults.style(visibleItemsCount = 5),
                         semantics = PickerDefaults.timePickerSemantics(
-                            hourPickerLabel = "시간",
-                            minutePickerLabel = "분",
-                            previousItemActionLabel = "이전 항목 선택",
-                            nextItemActionLabel = "다음 항목 선택"
+                            hourPickerLabel = "Hour",
+                            minutePickerLabel = "Minute",
+                            previousItemActionLabel = "Select previous value",
+                            nextItemActionLabel = "Select next value"
                         )
                     )
                 }

@@ -17,6 +17,22 @@ This project tracks notable user-facing and maintainer-facing changes here. The 
   adoption-evidence migration gate on 2026-08-05, and the pre-rename exact-name collision check for
   `compose-pickers` was repeated on the same date with no conflicts found.
 
+### Changed
+
+- Rewrote `README.md` and `README_KO.md` around the generic `WheelPicker<T>` foundation: the page
+  now opens with a one-line positioning statement, a short quick-start for the generic wheel and one
+  temporal preset, and a component table. Bounds, custom item lists, styling, column order, and
+  programmatic selection stay documented further down as optional configuration.
+- Redesigned the sample app home screen with a hero header, platform chips, and grouped sections
+  (foundation, temporal presets, dependent-column contracts, styling), and refreshed the sample color
+  scheme.
+- Replaced all Korean sample-app display strings with English equivalents. The sample ships a Web
+  (Wasm) target whose bundled font has no CJK glyphs, so the previous strings rendered as
+  missing-glyph boxes in the browser build and in every screenshot generated from it. The sample
+  still demonstrates custom item text, content descriptions, and semantics labels.
+- Regenerated all sample screenshots under `docs/images/sample/` from the Wasm build and removed the
+  stale, unreferenced `screenshot/` media directory.
+
 ### Added
 
 - Added a sample-local five-column `DateTimePicker` vertical slice backed by six exact

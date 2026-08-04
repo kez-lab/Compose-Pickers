@@ -1,39 +1,93 @@
 # Compose Pickers
 
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.kez-lab/compose-date-time-picker?label=maven%20central)](https://central.sonatype.com/artifact/io.github.kez-lab/compose-date-time-picker)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](./LICENSE)
+[![Platforms](https://img.shields.io/badge/platforms-Android%20%7C%20iOS%20%7C%20Desktop%20%7C%20Web-4F46E5)](#)
 [![Read in English](https://img.shields.io/badge/README-English-blue)](./README.md)
 
-Compose Multiplatform을 위한 controlled wheel selection 및 temporal picker 라이브러리입니다. Generic
-`WheelPicker<T>`와 범용 duration/date/time preset을 Android, iOS, Desktop (JVM), Web (Wasm)에서 일관된 API로
-제공합니다.
+**Compose Multiplatform을 위한 constraint-aware wheel selection 라이브러리입니다.**
 
-## 주요 기능
-
-*   **멀티플랫폼 지원**: Android, iOS, Desktop (JVM), Web (Wasm) 환경을 지원하며 원활한 통합이 가능합니다.
-*   **WheelPicker**: live 값 변경과 별도의 settled callback을 제공하는 controlled generic wheel입니다.
-*   **TimePicker**: 12시간(오전/오후) 및 24시간 형식을 모두 지원합니다.
-*   **DurationPicker**: 두 column을 하나의 bounded elapsed duration으로 commit합니다.
-*   **Quantity + Unit 저장소 sample 전용 — artifact API 아님**: unit 변경이 quantity item, step, format,
-    semantics를 교체해도 하나의 보정된 logical value만 commit하는 non-temporal 예제입니다.
-*   **Date + Time 저장소 sample 전용 — artifact API 아님**: 자정 경계를 가로지르는 다섯 dependent column을
-    하나의 exact `LocalDateTime`으로 commit하는 예제입니다.
-*   **DatePicker**: 연도, 월, 일을 함께 선택하고 월/윤년에 맞춰 일을 자동 보정합니다.
-*   **DateRangePicker**: 예약, 필터, 리포트 흐름에서 시작일과 종료일을 순서가 보장된 범위로 선택합니다.
-*   **YearMonthPicker**: 년도와 월을 선택할 수 있는 전용 컴포넌트를 제공합니다.
-*   **커스터마이징**: 재사용 가능한 UI 설정을 위한 `PickerStyle`과 format 옵션을 제공합니다.
-*   **상태 관리**: `rememberTimePickerState`, `rememberDurationPickerState`, `rememberDatePickerState`, `rememberDateRangePickerState`, `rememberYearMonthPickerState`를 통해 간편하게 상태를 관리할 수 있습니다.
-*   **접근성**: 스크린 리더 및 내비게이션 지원 등 접근성을 고려하여 설계되었습니다.
-
-## 샘플 앱
-
-이 저장소에는 generic wheel, dependent quantity/unit, combined date-time, duration, 날짜, 시간, bottom sheet
-흐름을 실제 앱 형태로 살펴볼 수 있는 Compose Multiplatform 샘플 앱이 포함되어 있습니다.
+어떤 값 목록에도 쓸 수 있는 generic `WheelPicker<T>` 하나와, 그 위에 올린 date, time, duration preset을
+제공합니다. 여러 wheel이 서로 의존할 때 불가능한 조합을 앱이 직접 보정하도록 떠넘기지 않고, 라이브러리가
+하나의 유효한 논리 상태로 유지합니다.
 
 <p align="center">
   <img src="docs/images/sample/sample-home.png" alt="샘플 앱 홈 화면" width="23%" />
+  <img src="docs/images/sample/sample-wheel-picker.png" alt="Generic WheelPicker 샘플 화면" width="23%" />
   <img src="docs/images/sample/sample-date-picker.png" alt="DatePicker 샘플 화면" width="23%" />
   <img src="docs/images/sample/sample-time-picker.png" alt="TimePicker 샘플 화면" width="23%" />
+</p>
+
+## 빠른 시작
+
+generic wheel로 아무 값 목록이나 선택할 수 있습니다.
+
+```kotlin
+var size by remember { mutableStateOf("Medium") }
+
+WheelPicker(
+    items = listOf("Small", "Medium", "Large"),
+    selectedItem = size,
+    onSelectedItemChange = { size = it }
+)
+```
+
+temporal preset은 자체 state를 소유합니다.
+
+```kotlin
+val state = rememberTimePickerState()
+
+TimePicker(
+    state = state,
+    onSelectedTimeChange = { time -> /* 앱 상태에 반영 */ }
+)
+```
+
+이 문서의 나머지 내용 — 범위 제한, 커스텀 item 목록, 스타일링, column 순서, 접근성 label, 프로그래밍 방식
+선택 — 은 모두 위 두 형태 위에 선택적으로 얹는 설정입니다.
+
+## 제공하는 컴포넌트
+
+| 컴포넌트 | 용도 |
+| :--- | :--- |
+| `WheelPicker<T>` | 임의의 값 한 열. live 변경과 별도의 settled callback을 제공합니다. |
+| `TimePicker` | 12시간(AM/PM) 또는 24시간 시간 선택. 선택적으로 `minTime`/`maxTime` 경계를 적용합니다. |
+| `DatePicker` | 연·월·일 선택. 일 자동 보정과 선택적 `minDate`/`maxDate` 경계를 제공합니다. |
+| `DateRangePicker` | 예약·필터·리포트 흐름을 위한 순서 보장 시작일/종료일. |
+| `YearMonthPicker` | 연·월만 선택하며 `YearMonth`를 일급 값으로 다룹니다. |
+| `DurationPicker` | 서로 의존하는 시/분 column을 하나의 bounded duration으로 commit합니다. |
+
+모든 컴포넌트는 controlled Compose API입니다. state는 saveable이고, 사용자 조작으로 인한 변경은 의존 column이
+settle된 뒤 단 한 번의 `onSelected*Change` callback으로 전달되며, 프로그래밍 방식 `state.select*` 호출은 그
+callback을 발생시키지 않습니다. 접근성 semantics(column label, 현재 값, 이전/다음 action, disabled 상태)는
+기본 제공되며 지역화할 수 있습니다.
+
+공통 특성:
+
+- **멀티플랫폼**: 하나의 코드베이스로 Android, iOS, Desktop (JVM), Web (Wasm)을 지원합니다.
+- **커스터마이징**: 파라미터 목록을 계속 늘리는 대신 `PickerStyle`, format, layout, semantics 옵션 객체를
+  사용합니다.
+- **제약 보정**: 복원된 값이나 preset을 picker와 동일한 규칙으로 정규화할 수 있도록 public `contains` /
+  `coerce*` helper를 제공합니다.
+
+## 샘플 앱
+
+이 저장소에는 generic wheel, temporal preset, 의존 column 계약(quantity/unit, date-time), bottom sheet 통합,
+스타일링을 모두 다루는 Compose Multiplatform 샘플 앱이 포함되어 있습니다.
+
+```bash
+./gradlew :sample:desktopRun
+```
+
+<p align="center">
+  <img src="docs/images/sample/sample-duration-picker.png" alt="DurationPicker 샘플 화면" width="23%" />
+  <img src="docs/images/sample/sample-date-range-picker.png" alt="DateRangePicker 샘플 화면" width="23%" />
+  <img src="docs/images/sample/sample-year-month-picker.png" alt="YearMonthPicker 샘플 화면" width="23%" />
   <img src="docs/images/sample/sample-bottom-sheet.png" alt="Bottom sheet picker 샘플 화면" width="23%" />
 </p>
+
+이 중 **Quantity + Unit**과 **Exact Date-Time Slots** 두 흐름은 저장소 계약 검증 전용입니다. date/time 도메인
+밖에서의 의존 column 보정을 보여주기 위한 예제이며 배포되는 artifact API에는 포함되지 않습니다.
 
 ## 설치 방법
 
@@ -63,7 +117,7 @@ dependencies {
 
 ## 사용법
 
-> 아래 예제는 현재 `main` 브랜치 API를 기준으로 합니다. 공개 Maven Central `0.6.0` artifact에 아직 없는 post-`0.6.0` API가 필요할 수 있습니다.
+> 아래 예제는 아직 배포되지 않은 현재 `main` 브랜치 API를 기준으로 합니다. [설치 방법](#설치-방법)의 릴리스 상태 안내를 참고하세요.
 
 ### State와 Callback 사용 패턴
 
