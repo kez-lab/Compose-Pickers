@@ -1,8 +1,21 @@
 # Changelog
 
-This project tracks notable user-facing and maintainer-facing changes here. The repository version is `0.6.0`; the `Unreleased` section documents changes queued for the next release.
+This project tracks notable user-facing and maintainer-facing changes here. The repository version is `0.7.0`; the `Unreleased` section documents changes queued for the next release.
 
 ## Unreleased
+
+### Changed (Breaking)
+
+- Renamed the project to **Compose-Pickers**. The GitHub repository moved to
+  `kez-lab/Compose-Pickers` (old URLs redirect), the Gradle library module moved from
+  `:datetimepicker` to `:pickers`, and the Maven coordinates changed from
+  `io.github.kez-lab:compose-date-time-picker` to `io.github.kez-lab:compose-pickers` starting with
+  `0.7.0`. The Kotlin package `com.kez.picker` and all public API names are unchanged, so migrating
+  only requires updating the dependency coordinates. The old artifact stays available on Maven
+  Central up to `0.6.0` but will not receive further releases. This executes the brand decision
+  recorded in `docs/product/wheel-picker-engine-direction.md`; the maintainer waived the remaining
+  adoption-evidence migration gate on 2026-08-05, and the pre-rename exact-name collision check for
+  `compose-pickers` was repeated on the same date with no conflicts found.
 
 ### Added
 
@@ -259,7 +272,7 @@ This project tracks notable user-facing and maintainer-facing changes here. The 
 ### Compatibility Notes
 
 - The `*Preview` cleanup removes previously exposed but undocumented tooling symbols from repository ABI dumps. It does not remove supported picker/state APIs. If app code imported those preview functions from a local or snapshot build, remove those calls and use the actual picker composables instead.
-- ABI dump updates are now part of public API review. Intentional public API changes should update `datetimepicker/api/` and explain the compatibility impact.
+- ABI dump updates are now part of public API review. Intentional public API changes should update `pickers/api/` and explain the compatibility impact.
 - The controlled picker/state overhaul is a breaking 0.x API change. Replace
   `rememberPickerState(...)` + `Picker(state = ..., startIndex = ...)` with app-owned
   `selectedItem` state, and move all date/time initial values into `remember*State`.

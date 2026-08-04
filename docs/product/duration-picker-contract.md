@@ -69,5 +69,5 @@ Second precision이나 추가 column은 실제 first-use 요구와 반복 가능
 - disabled picker는 선택값과 disabled semantics를 유지하면서 user action을 막는다.
 - sample은 전체 90분 상한, 5분 step, preset programmatic selection을 보여준다.
 - KDoc, README.md, README_KO.md, CHANGELOG.md, sample, ABI dump가 같은 계약을 설명한다.
-- `:datetimepicker:check`, `:datetimepicker:checkLegacyAbi`, Desktop/iOS compile, Wasm distribution,
+- `:pickers:check`, `:pickers:checkLegacyAbi`, Desktop/iOS compile, Wasm distribution,
   sample Android test packaging과 `git diff --check`를 통과한다.

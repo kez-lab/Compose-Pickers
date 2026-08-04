@@ -1,4 +1,4 @@
-# Compose DateTimePicker
+# Compose Pickers
 
 [![Read in Korean](https://img.shields.io/badge/README-Korean-green)](./README_KO.md)
 
@@ -47,21 +47,21 @@ Add the dependency to your version catalog or build file.
 
 ```toml
 [versions]
-composeDateTimePicker = "0.6.0"
+composePickers = "0.7.0"
 
 [libraries]
-compose-date-time-picker = { module = "io.github.kez-lab:compose-date-time-picker", version.ref = "composeDateTimePicker" }
+compose-pickers = { module = "io.github.kez-lab:compose-pickers", version.ref = "composePickers" }
 ```
 
 ### Gradle (build.gradle.kts)
 
 ```kotlin
 dependencies {
-    implementation("io.github.kez-lab:compose-date-time-picker:0.6.0")
+    implementation("io.github.kez-lab:compose-pickers:0.7.0")
 }
 ```
 
-> **Release status:** `0.6.0` is the latest public Maven Central version. GitHub Releases may still show `0.4.0` as the latest tagged release. This README is maintained from `main`, so Usage and API Reference sections can include APIs that are not in the public `0.6.0` artifact yet. To test `main` locally, run `./gradlew :datetimepicker:publishToMavenLocal`, add `mavenLocal()` to your consuming build, and depend on the repository `VERSION_NAME`.
+> **Release status:** The library was renamed in `0.7.0`. The `io.github.kez-lab:compose-pickers` coordinates above are **not published to Maven Central yet**; the latest published artifact is `io.github.kez-lab:compose-date-time-picker:0.6.0` under the previous project name (GitHub Releases may still show `0.4.0` as the latest tagged release). Until the first `compose-pickers` release ships, either depend on the old `0.6.0` artifact or test `main` locally: run `./gradlew :pickers:publishToMavenLocal`, add `mavenLocal()` to your consuming build, and depend on the repository `VERSION_NAME`. This README is maintained from `main`, so Usage and API Reference sections can include APIs that are not in any published artifact yet.
 
 For release notes and upgrade-impact details, see [CHANGELOG.md](CHANGELOG.md).
 

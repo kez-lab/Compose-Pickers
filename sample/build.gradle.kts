@@ -47,7 +47,7 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(project(":datetimepicker"))
+            implementation(project(":pickers"))
 
             implementation(libs.compose.runtime)
             implementation(libs.compose.foundation)

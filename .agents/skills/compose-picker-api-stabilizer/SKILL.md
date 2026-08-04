@@ -1,6 +1,6 @@
 ---
 name: compose-picker-api-stabilizer
-description: Audit and improve Compose-DateTimePicker public API ergonomics, API stability, ABI dumps, KDoc, README usage, picker state contracts, item constraints, formatting, semantics, and cross-component invariants. Use when working on Picker, TimePicker, DatePicker, YearMonthPicker, DateRangePicker, or any public API change in this repository.
+description: Audit and improve Compose-Pickers public API ergonomics, API stability, ABI dumps, KDoc, README usage, picker state contracts, item constraints, formatting, semantics, and cross-component invariants. Use when working on Picker, TimePicker, DatePicker, YearMonthPicker, DateRangePicker, or any public API change in this repository.
 ---
 
 # Compose Picker API Stabilizer
@@ -38,9 +38,9 @@ For intentional public API changes:
 1. Update KDoc on every new or changed public symbol.
 2. Update `README.md` and `README_KO.md` with usage, failure mode, and state-clamping guidance.
 3. Update `CHANGELOG.md`.
-4. Run `./gradlew :datetimepicker:updateLegacyAbi --no-daemon`.
-5. Review `datetimepicker/api/` dumps for intended symbols only. Reject accidental `*Preview` or generated resource API churn.
-6. Run `./gradlew :datetimepicker:checkLegacyAbi --no-daemon`.
+4. Run `./gradlew :pickers:updateLegacyAbi --no-daemon`.
+5. Review `pickers/api/` dumps for intended symbols only. Reject accidental `*Preview` or generated resource API churn.
+6. Run `./gradlew :pickers:checkLegacyAbi --no-daemon`.
 
 ## Test Targets
 

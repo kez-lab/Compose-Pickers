@@ -47,7 +47,7 @@ presets이자 회귀 검증 기준이다. 이후 `DurationPicker`와 `QuantityUn
 
 | 저장소 | 범위 | stars / forks | 최근 push 또는 release | 해석 |
 |---|---|---:|---|---|
-| `kez-lab/Compose-DateTimePicker` | KMP temporal + generic `Picker<T>` | 24 / 2 | push 2026-07-17, public release 0.4.0 (2025-11-12) | 기술 기반은 있으나 외부 인지도는 낮다. |
+| `kez-lab/Compose-DateTimePicker` (현 `Compose-Pickers`) | KMP temporal + generic `Picker<T>` | 24 / 2 | push 2026-07-17, public release 0.4.0 (2025-11-12) | 기술 기반은 있으나 외부 인지도는 낮다. |
 | `commandiron/WheelPickerCompose` | Android temporal wheel | 620 / 80 | release 1.1.11 (2023-06-05), push 2024-05-16 | Android wheel 수요의 강한 과거 proxy다. |
 | `darkokoa/compose-datetime-wheel-picker` | KMP temporal wheel | 259 / 24 | release v1.3.3 (2026-07-01) | 현재 temporal 정면 경쟁자다. |
 | `software-mansion-labs/kmp-wheel-picker` | KMP generic wheel core | 85 / 1 | release v0.3.0 (2026-01-08) | 단순 generic core 전략의 직접 경쟁자다. |
@@ -103,8 +103,15 @@ Android에는 Compose를 지원하는 `dev.aige.pub:WheelPicker`와 여러 `whee
 않았다. 이는 법률적 상표 clearance나 향후 namespace 확보를 보장하지 않는다. 실제 repository/artifact rename
 직전에는 GitHub, Maven Central, 주요 package registry와 필요한 상표권역을 다시 검색한다.
 
-브랜드 확정과 migration 실행은 별개의 결정이다. 다음 조건을 충족하기 전까지 공개 설치 좌표와 저장소 이름은
-`Compose-DateTimePicker` / `io.github.kez-lab:compose-date-time-picker`로 유지한다.
+브랜드 확정과 migration 실행은 별개의 결정이다. 원래 gate는 다음 조건을 충족하기 전까지 저장소 이름과
+공개 설치 좌표를 `Compose-DateTimePicker` / `io.github.kez-lab:compose-date-time-picker`로 유지하는 것이었다.
+
+> Maintainer decision: 2026-08-05에 메인테이너가 남은 gate(외부 first-use/adoption 증거)를 워이브하고
+> migration을 실행했다. 저장소는 `kez-lab/Compose-Pickers`로 rename되었고(구 URL은 GitHub redirect),
+> Maven 좌표는 `0.7.0`부터 `io.github.kez-lab:compose-pickers`를 사용한다. Kotlin package `com.kez.picker`와
+> 공개 API 이름은 변경하지 않았다. rename 직전 exact-name 충돌 재검색(gate 4)은 2026-08-05에 수행했고
+> 충돌은 발견되지 않았다. 기존 `compose-date-time-picker` artifact는 `0.6.0`까지 Maven Central에 유지되며
+> 이후 릴리스는 새 좌표로만 배포한다.
 
 1. 최소 두 개의 non-temporal preset으로 범용 picker 가설을 검증한다.
 2. 기존 artifact 사용자를 위한 병행 배포 또는 명시적 migration 경로를 준비한다.

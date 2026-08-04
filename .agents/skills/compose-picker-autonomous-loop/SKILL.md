@@ -1,6 +1,6 @@
 ---
 name: compose-picker-autonomous-loop
-description: Run long autonomous improvement loops for the Compose-DateTimePicker repository. Use when the maintainer asks for a Codex goal, 12-hour improvement run, autonomous API/library hardening, branch/PR planning, worktree strategy, or repo-scoped execution plan for this Kotlin Multiplatform picker library.
+description: Run long autonomous improvement loops for the Compose-Pickers repository. Use when the maintainer asks for a Codex goal, 12-hour improvement run, autonomous API/library hardening, branch/PR planning, worktree strategy, or repo-scoped execution plan for this Kotlin Multiplatform picker library.
 ---
 
 # Compose Picker Autonomous Loop
@@ -19,7 +19,7 @@ git branch -a --sort=-committerdate
 gh pr list --state open --limit 20 --json number,title,headRefName,baseRefName,isDraft,mergeStateStatus,url
 ```
 
-Also inspect `README.md`, `README_KO.md`, `CHANGELOG.md`, `gradle.properties`, `datetimepicker/api/`, and the relevant picker source/test files before making public API decisions.
+Also inspect `README.md`, `README_KO.md`, `CHANGELOG.md`, `gradle.properties`, `pickers/api/`, and the relevant picker source/test files before making public API decisions.
 
 ## Branch Strategy
 

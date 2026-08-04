@@ -8,9 +8,9 @@ This file provides guidance to Codex (Codex.ai/code) when working with code in t
 
 ## Project Overview
 
-Compose-DateTimePicker is a Kotlin Multiplatform library providing date and time picker components for Compose. It targets Android, iOS, Desktop (JVM), and Web with a shared codebase, published to Maven Central as `io.github.kez-lab:compose-date-time-picker`.
+Compose-Pickers (formerly Compose-DateTimePicker) is a Kotlin Multiplatform library providing constraint-aware wheel selection for Compose: a generic `WheelPicker<T>` plus date, time, and duration presets. It targets Android, iOS, Desktop (JVM), and Web with a shared codebase. The target Maven coordinates are `io.github.kez-lab:compose-pickers` (first release pending); the latest published artifact is still `io.github.kez-lab:compose-date-time-picker:0.6.0`.
 
-**Repository VERSION_NAME**: 0.6.0
+**Repository VERSION_NAME**: 0.7.0
 **License**: Apache 2.0
 
 ## Architecture
@@ -70,7 +70,7 @@ User scrolls LazyColumn
 ### Multiplatform Structure
 
 ```
-datetimepicker/src/
+pickers/src/
 ├── commonMain/kotlin/    # Shared UI and logic
 ├── androidMain/          # Android-specific (UI tooling preview)
 ├── iosMain/              # iOS-specific (currently minimal)
@@ -120,8 +120,8 @@ Most logic lives in `commonMain`. Platform-specific code is minimal.
 - During programmatic selection sync, do not let intermediate `LazyListState` scroll positions overwrite the requested state value before the picker settles.
 - When higher-level components pass semantics labels to `Picker`, expose them through component-specific semantics option objects with sensible defaults so Android apps can localize TalkBack output. Update KDoc and both READMEs in the same PR.
 - Kotlin 2.2.21 ABI validation uses `checkLegacyAbi`/`updateLegacyAbi` in this repo. Re-check task names and dump format after Kotlin upgrades.
-- Treat `datetimepicker/api/` as committed release-gate data. Public API changes must include reviewed ABI dump updates, and reviewers should separate intended picker/state API changes from preview/generated resource churn.
-- Keep `@Preview` composables private tooling code so sample previews do not become part of the supported public API surface. Reject ABI dump changes that add `*Preview` symbols back to `datetimepicker/api/`. If accidental preview symbols are removed from ABI dumps, call out the compatibility impact in the PR and release notes.
+- Treat `pickers/api/` as committed release-gate data. Public API changes must include reviewed ABI dump updates, and reviewers should separate intended picker/state API changes from preview/generated resource churn.
+- Keep `@Preview` composables private tooling code so sample previews do not become part of the supported public API surface. Reject ABI dump changes that add `*Preview` symbols back to `pickers/api/`. If accidental preview symbols are removed from ABI dumps, call out the compatibility impact in the PR and release notes.
 - Distinguish the latest public Maven Central/GitHub Release version from the repository `VERSION_NAME`. Before changing README install snippets, verify the public release and do not point copy-paste dependency examples at unpublished versions unless the docs explicitly mark them as unreleased/local-publish usage.
 - When README install snippets use the latest public release but Usage/API Reference examples target `main` or unreleased APIs, add visible release-status notes near Installation, Usage, and API Reference, including the `publishToMavenLocal` command for local testing.
 - Keep repository guidance up to date in this `AGENTS.md` when the maintainer gives durable process feedback.
@@ -131,26 +131,26 @@ Most logic lives in `commonMain`. Platform-specific code is minimal.
 
 ```bash
 # Build library module only
-./gradlew :datetimepicker:assemble --no-daemon
+./gradlew :pickers:assemble --no-daemon
 
 # Build all targets (Android, iOS, Desktop, JS)
 ./gradlew build --no-daemon
 
 # Compile specific targets
-./gradlew :datetimepicker:compileKotlinMetadata --no-daemon  # Common
-./gradlew :datetimepicker:compileKotlinDesktop --no-daemon   # Desktop
-./gradlew :datetimepicker:compileDebugKotlinAndroid --no-daemon
+./gradlew :pickers:compileKotlinMetadata --no-daemon  # Common
+./gradlew :pickers:compileKotlinDesktop --no-daemon   # Desktop
+./gradlew :pickers:compileDebugKotlinAndroid --no-daemon
 ```
 
 ### Testing
 
 ```bash
 # Run all tests
-./gradlew :datetimepicker:test --no-daemon
+./gradlew :pickers:test --no-daemon
 
 # Run library Android component UI tests on Robolectric
-./gradlew :datetimepicker:testDebugUnitTest --no-daemon
-./gradlew :datetimepicker:testReleaseUnitTest --no-daemon
+./gradlew :pickers:testDebugUnitTest --no-daemon
+./gradlew :pickers:testReleaseUnitTest --no-daemon
 
 # Compile sample Android instrumented tests
 ./gradlew :sample:assembleDebugAndroidTest --no-daemon
@@ -164,17 +164,17 @@ Most logic lives in `commonMain`. Platform-specific code is minimal.
 ./gradlew :sample:connectedDebugAndroidTest --no-daemon
 
 # Run checks (tests + lint)
-./gradlew :datetimepicker:check --no-daemon
+./gradlew :pickers:check --no-daemon
 
 # Check PR diff whitespace/conflict markers (same hygiene gate as CI)
 git diff --check origin/main...HEAD
 
 # Check public Kotlin ABI against the committed reference dump.
-# Run this explicitly; do not assume :datetimepicker:check covers the ABI gate.
-./gradlew :datetimepicker:checkLegacyAbi --no-daemon
+# Run this explicitly; do not assume :pickers:check covers the ABI gate.
+./gradlew :pickers:checkLegacyAbi --no-daemon
 
 # Update the Kotlin ABI reference dump after an intentional public API change
-./gradlew :datetimepicker:updateLegacyAbi --no-daemon
+./gradlew :pickers:updateLegacyAbi --no-daemon
 
 # Verify sample app compilation
 ./gradlew :sample:compileKotlinDesktop --no-daemon
@@ -183,7 +183,7 @@ git diff --check origin/main...HEAD
 
 **Run a single test**: Use `--tests` filter:
 ```bash
-./gradlew :datetimepicker:testDebugUnitTest --tests "com.kez.picker.TimePickerStateTest.timePickerState_24HourFormat_initialValues_areCorrect" --no-daemon
+./gradlew :pickers:testDebugUnitTest --tests "com.kez.picker.TimePickerStateTest.timePickerState_24HourFormat_initialValues_areCorrect" --no-daemon
 ```
 
 ### Sample App
@@ -206,7 +206,7 @@ adb shell am start -n com.kez.picker.sample/.MainActivity
 ./gradlew printVersion
 
 # Test local publish
-./gradlew :datetimepicker:publishToMavenLocal
+./gradlew :pickers:publishToMavenLocal
 
 # Production deploy: manually triggered by GitHub Actions workflow_dispatch
 # See .github/workflows/maven-central-deploy.yml
@@ -253,12 +253,12 @@ color = lerp(selectedTextStyle.color, textStyle.color, fraction)
 - Missing: broader UI interaction tests, screenshot tests, and full TalkBack/readout validation
 
 **When adding tests**:
-- Unit tests → `datetimepicker/src/commonTest/kotlin/`
-- Library Android component UI tests that do not need a real Activity/app journey → `datetimepicker/src/androidUnitTest/kotlin/` with Robolectric
-- Library Android instrumented tests that must run on a device/emulator → `datetimepicker/src/androidInstrumentedTest/kotlin/`
+- Unit tests → `pickers/src/commonTest/kotlin/`
+- Library Android component UI tests that do not need a real Activity/app journey → `pickers/src/androidUnitTest/kotlin/` with Robolectric
+- Library Android instrumented tests that must run on a device/emulator → `pickers/src/androidInstrumentedTest/kotlin/`
 - Sample Android smoke tests → `sample/src/androidInstrumentedTest/kotlin/`
-- Use `:datetimepicker:testDebugUnitTest` or `:datetimepicker:testReleaseUnitTest` for library Robolectric component UI tests. Use `:sample:assembleDebugAndroidTest` to verify sample Android test APK compilation/packaging. Use `:sample:pixel2Api35DebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect` for the Gradle Managed Device path used by CI; it requires Android Emulator, the API 35 AOSP ATD system image for the host architecture, and local virtualization/KVM. Use `:sample:connectedDebugAndroidTest` when a local device or emulator is already available. If managed-device prerequisites are unavailable locally, run `assembleDebugAndroidTest` or a managed-device `--dry-run` and rely on CI for the actual emulator run.
-- Public Kotlin API/ABI changes → run `:datetimepicker:checkLegacyAbi`. If the API change is intentional and SemVer-appropriate, run `:datetimepicker:updateLegacyAbi`, commit the updated `datetimepicker/api/` dumps, and review preview/generated resource changes separately from supported picker/state API changes.
+- Use `:pickers:testDebugUnitTest` or `:pickers:testReleaseUnitTest` for library Robolectric component UI tests. Use `:sample:assembleDebugAndroidTest` to verify sample Android test APK compilation/packaging. Use `:sample:pixel2Api35DebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect` for the Gradle Managed Device path used by CI; it requires Android Emulator, the API 35 AOSP ATD system image for the host architecture, and local virtualization/KVM. Use `:sample:connectedDebugAndroidTest` when a local device or emulator is already available. If managed-device prerequisites are unavailable locally, run `assembleDebugAndroidTest` or a managed-device `--dry-run` and rely on CI for the actual emulator run.
+- Public Kotlin API/ABI changes → run `:pickers:checkLegacyAbi`. If the API change is intentional and SemVer-appropriate, run `:pickers:updateLegacyAbi`, commit the updated `pickers/api/` dumps, and review preview/generated resource changes separately from supported picker/state API changes.
 - Follow naming: `<ComponentName>Test.kt`, `<ComponentName>RobolectricTest.kt`, or `<ComponentName>AndroidTest.kt`
 
 ## Code Style

@@ -1,6 +1,6 @@
 ---
 name: compose-picker-local-verifier
-description: Select and run fast local verification gates for Compose-DateTimePicker changes while hosted GitHub Actions PR automation is disabled. Use before handoff, PR creation, merging, or after modifying Kotlin source, public APIs, README/CHANGELOG docs, sample app code, or workflow files.
+description: Select and run fast local verification gates for Compose-Pickers changes while hosted GitHub Actions PR automation is disabled. Use before handoff, PR creation, merging, or after modifying Kotlin source, public APIs, README/CHANGELOG docs, sample app code, or workflow files.
 ---
 
 # Compose Picker Local Verifier
@@ -34,26 +34,26 @@ command -v actionlint >/dev/null && actionlint .github/workflows/*.yml
 Common Kotlin logic or picker state changes:
 
 ```bash
-./gradlew :datetimepicker:test --no-daemon
+./gradlew :pickers:test --no-daemon
 ```
 
 Android Compose semantics, state restoration, or component UI behavior:
 
 ```bash
-./gradlew :datetimepicker:testDebugUnitTest --no-daemon
+./gradlew :pickers:testDebugUnitTest --no-daemon
 ```
 
 Public API changes:
 
 ```bash
-./gradlew :datetimepicker:checkLegacyAbi --no-daemon
+./gradlew :pickers:checkLegacyAbi --no-daemon
 ```
 
 If `checkLegacyAbi` fails because the public API change is intentional, run:
 
 ```bash
-./gradlew :datetimepicker:updateLegacyAbi --no-daemon
-./gradlew :datetimepicker:checkLegacyAbi --no-daemon
+./gradlew :pickers:updateLegacyAbi --no-daemon
+./gradlew :pickers:checkLegacyAbi --no-daemon
 ```
 
 Sample app changes:
@@ -67,8 +67,8 @@ Sample app changes:
 Broad release readiness:
 
 ```bash
-./gradlew :datetimepicker:check --no-daemon
-./gradlew :datetimepicker:checkLegacyAbi --no-daemon
+./gradlew :pickers:check --no-daemon
+./gradlew :pickers:checkLegacyAbi --no-daemon
 ```
 
 ## Slow or Environment-Dependent Gates
