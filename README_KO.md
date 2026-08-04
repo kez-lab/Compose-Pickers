@@ -1,4 +1,4 @@
-# Compose DateTimePicker
+# Compose Pickers
 
 [![Read in English](https://img.shields.io/badge/README-English-blue)](./README.md)
 
@@ -43,21 +43,21 @@ Compose Multiplatform을 위한 controlled wheel selection 및 temporal picker �
 
 ```toml
 [versions]
-composeDateTimePicker = "0.6.0"
+composePickers = "0.7.0"
 
 [libraries]
-compose-date-time-picker = { module = "io.github.kez-lab:compose-date-time-picker", version.ref = "composeDateTimePicker" }
+compose-pickers = { module = "io.github.kez-lab:compose-pickers", version.ref = "composePickers" }
 ```
 
 ### Gradle (build.gradle.kts)
 
 ```kotlin
 dependencies {
-    implementation("io.github.kez-lab:compose-date-time-picker:0.6.0")
+    implementation("io.github.kez-lab:compose-pickers:0.7.0")
 }
 ```
 
-> **릴리스 상태:** `0.6.0`이 현재 Maven Central에 공개된 최신 버전입니다. GitHub Releases 화면은 아직 `0.4.0`을 최신 태그 릴리스로 표시할 수 있습니다. 이 README는 `main` 기준으로 유지되므로, 사용법과 API 레퍼런스에는 공개 `0.6.0` artifact에 아직 없는 API가 포함될 수 있습니다. `main`을 로컬에서 테스트하려면 `./gradlew :datetimepicker:publishToMavenLocal`을 실행하고, 소비 프로젝트에 `mavenLocal()`을 추가한 뒤 저장소 `VERSION_NAME`에 의존하세요.
+> **릴리스 상태:** 라이브러리는 `0.7.0`에서 `Compose-Pickers`로 이름이 변경되었습니다. 위의 `io.github.kez-lab:compose-pickers` 좌표는 **아직 Maven Central에 배포되지 않았습니다**. 현재 배포된 최신 artifact는 이전 이름의 `io.github.kez-lab:compose-date-time-picker:0.6.0`입니다(GitHub Releases 화면은 아직 `0.4.0`을 최신 태그로 표시할 수 있습니다). 첫 `compose-pickers` 릴리스 전까지는 기존 `0.6.0` artifact를 사용하거나, `./gradlew :pickers:publishToMavenLocal` 실행 후 소비 프로젝트에 `mavenLocal()`을 추가하고 저장소 `VERSION_NAME`에 의존해 `main`을 로컬에서 테스트하세요. 이 README는 `main` 기준으로 유지되므로, 사용법과 API 레퍼런스에는 아직 배포되지 않은 API가 포함될 수 있습니다.
 
 릴리스 노트와 업그레이드 영향은 영문 [CHANGELOG.md](CHANGELOG.md)를 참고하세요.
 

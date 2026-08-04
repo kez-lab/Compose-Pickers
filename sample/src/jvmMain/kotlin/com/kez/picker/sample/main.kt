@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 fun main() = application {
     Window(
         onCloseRequest = ::exitApplication,
-        title = "DateTimePicker Demo",
+        title = "Compose Pickers Demo",
         state = rememberWindowState()
     ) {
         Surface(modifier = Modifier.fillMaxSize()) {

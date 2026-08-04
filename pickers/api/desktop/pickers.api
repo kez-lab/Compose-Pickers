@@ -661,8 +661,8 @@ public final class com/kez/picker/YearMonthPickerSemantics {
 public final class com/kez/picker/date/ComposableSingletons$DateRangePickerKt {
 	public static final field INSTANCE Lcom/kez/picker/date/ComposableSingletons$DateRangePickerKt;
 	public fun <init> ()V
-	public final fun getLambda$-389316622$datetimepicker ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$705837451$datetimepicker ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$-389316622$pickers ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$705837451$pickers ()Lkotlin/jvm/functions/Function2;
 }
 
 public final class com/kez/picker/date/DatePickerKt {

@@ -110,7 +110,7 @@ engine primitive.
 - Before fixing a public surface, one private shared prototype must reimplement at least two existing
   slices without increasing preset-specific glue or exception paths. The proposal must explicitly
   choose whether v1 supports only an ordered dependency chain or an arbitrary dependency graph.
-  Every prototype symbol must remain `internal` with zero `datetimepicker/api/` public-symbol delta.
+  Every prototype symbol must remain `internal` with zero `pickers/api/` public-symbol delta.
   At least one temporal and one non-temporal slice must share the same core reducer/generation
   implementation and contract-test harness without preset-type `when`, casts, or exception adapters,
   and existing public preset signatures must not change.

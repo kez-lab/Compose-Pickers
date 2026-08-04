@@ -22,7 +22,7 @@ permissions:
   contents: read
 
 env:
-  LIBRARY_MODULE: ":datetimepicker"
+  LIBRARY_MODULE: ":pickers"
   SAMPLE_MODULE: ":sample"
   BASE_REF: ${{ inputs.base_ref || github.base_ref || 'main' }}
 jobs:
@@ -144,9 +144,9 @@ jobs:
         with:
           name: android-instrumented-test-reports
           path: |
-            datetimepicker/build/reports/androidTests/**
-            datetimepicker/build/outputs/androidTest-results/**
-            datetimepicker/build/outputs/managed_device_android_test_additional_output/**
+            pickers/build/reports/androidTests/**
+            pickers/build/outputs/androidTest-results/**
+            pickers/build/outputs/managed_device_android_test_additional_output/**
             sample/build/reports/androidTests/**
             sample/build/outputs/androidTest-results/**
             sample/build/outputs/managed_device_android_test_additional_output/**

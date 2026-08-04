@@ -28,7 +28,7 @@ class SampleAppSmokeAndroidTest {
     @Test
     fun homeScreen_displaysPrimarySampleMenuActions() {
         composeRule
-            .onNodeWithText("Compose DateTimePicker")
+            .onNodeWithText("Compose Pickers")
             .assertIsDisplayed()
 
         sampleMenuTags.forEach { tag ->
@@ -56,7 +56,7 @@ class SampleAppSmokeAndroidTest {
             .performClick()
 
         composeRule
-            .onNodeWithText("Compose DateTimePicker")
+            .onNodeWithText("Compose Pickers")
             .assertIsDisplayed()
     }
 
@@ -327,7 +327,7 @@ class SampleAppSmokeAndroidTest {
             .performClick()
 
         composeRule
-            .onNodeWithText("Compose DateTimePicker")
+            .onNodeWithText("Compose Pickers")
             .assertIsDisplayed()
     }
 

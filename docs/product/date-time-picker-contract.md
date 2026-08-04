@@ -85,7 +85,7 @@ prototype 하나로 기존 slice 최소 두 개를 preset별 예외나 glue 증�
 chain만 지원할지 arbitrary dependency graph까지 지원할지 명시적으로 결정해야 한다. 이 prototype은 다음
 interaction/UX 증거도 통과해야 한다.
 
-- 모든 prototype symbol은 `internal`이고 `datetimepicker/api/` public symbol delta는 0이어야 한다.
+- 모든 prototype symbol은 `internal`이고 `pickers/api/` public symbol delta는 0이어야 한다.
 - 최소 한 temporal slice와 한 non-temporal slice가 동일한 core reducer/generation 구현과 공통 contract test
   harness를 사용해야 한다.
 - core는 preset type을 검사하는 `when`, cast 또는 preset별 예외 adapter를 두지 않으며 기존 public preset

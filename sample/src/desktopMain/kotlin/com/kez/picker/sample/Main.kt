@@ -9,7 +9,7 @@ import androidx.compose.ui.unit.dp
 fun main() = application {
     Window(
         onCloseRequest = ::exitApplication,
-        title = "Picker Demo",
+        title = "Compose Pickers Demo",
         state = rememberWindowState(size = DpSize(400.dp, 800.dp))
     ) {
         App()

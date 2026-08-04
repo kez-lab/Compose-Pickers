@@ -47,7 +47,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":datetimepicker"))
+    implementation(project(":pickers"))
     implementation(libs.androidx.activityCompose)
     implementation(libs.compose.material3)
     implementation(libs.compose.ui)

@@ -1,11 +1,11 @@
 # Compose-Pickers 장기 목표
 
-이 문서는 현재 `Compose-DateTimePicker` 저장소를 목표 브랜드 `Compose-Pickers`로 발전시키는 장기 Codex
-goal을 다시 시작할 때 사용하는 기준 프롬프트다. 제품 판단, 시장 근거, 브랜드 migration gate는
+이 문서는 `Compose-Pickers`(구 `Compose-DateTimePicker`) 저장소를 발전시키는 장기 Codex
+goal을 다시 시작할 때 사용하는 기준 프롬프트다. 브랜드 migration은 2026-08-05에 실행되었다. 제품 판단, 시장 근거, 브랜드 migration gate는
 [`docs/product/wheel-picker-engine-direction.md`](../product/wheel-picker-engine-direction.md)를 먼저 읽는다.
 
 ```text
-Goal: 현재 Compose-DateTimePicker를 date/time 전용 component 모음에서, 목표 브랜드 Compose-Pickers 아래
+Goal: Compose-Pickers(구 Compose-DateTimePicker)를 date/time 전용 component 모음에서,
 서로 의존하는 여러 열을 하나의 유효한 논리 상태로 유지하는 constraint-aware Compose Multiplatform wheel
 selection engine으로 발전시킨다.
 

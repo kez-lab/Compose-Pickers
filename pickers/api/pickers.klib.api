@@ -5,7 +5,7 @@
 // - Show manifest properties: true
 // - Show declarations: true
 
-// Library unique name: <Compose-DateTimePicker:datetimepicker>
+// Library unique name: <Compose-Pickers:pickers>
 final enum class com.kez.picker.util/TimeFormat : kotlin/Enum<com.kez.picker.util/TimeFormat> { // com.kez.picker.util/TimeFormat|null[0]
     enum entry HOUR_12 // com.kez.picker.util/TimeFormat.HOUR_12|null[0]
     enum entry HOUR_24 // com.kez.picker.util/TimeFormat.HOUR_24|null[0]

@@ -49,7 +49,7 @@ internal fun HomeScreen(navController: NavController) {
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        "Compose DateTimePicker",
+                        "Compose Pickers",
                         fontWeight = FontWeight.Bold
                     )
                 },
