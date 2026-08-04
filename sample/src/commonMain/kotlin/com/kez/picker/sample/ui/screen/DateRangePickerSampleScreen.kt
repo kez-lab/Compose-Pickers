@@ -157,9 +157,9 @@ internal fun DateRangePickerSampleScreen(
                         lastUserRangeText = selectedRange.asText()
                     },
                     format = PickerDefaults.datePickerFormat(
-                        yearItemText = { "${it}년" },
+                        yearItemText = { "$it" },
                         monthItemText = { getMonthName(it) },
-                        dayItemText = { "${it}일" },
+                        dayItemText = { "$it" },
                         monthItemContentDescription = { getMonthContentDescription(it) }
                     ),
                     layout = PickerDefaults.datePickerLayout(
@@ -168,18 +168,18 @@ internal fun DateRangePickerSampleScreen(
                         dayWeight = 0.75f
                     ),
                     spacingBetweenPickers = 8.dp,
-                    startLabel = { Text("시작일") },
-                    endLabel = { Text("종료일") },
+                    startLabel = { Text("Start date") },
+                    endLabel = { Text("End date") },
                     semantics = PickerDefaults.dateRangePickerSemantics(
                         start = PickerDefaults.datePickerSemantics(
-                            yearPickerLabel = "시작 연도",
-                            monthPickerLabel = "시작 월",
-                            dayPickerLabel = "시작 일"
+                            yearPickerLabel = "Start year",
+                            monthPickerLabel = "Start month",
+                            dayPickerLabel = "Start day"
                         ),
                         end = PickerDefaults.datePickerSemantics(
-                            yearPickerLabel = "종료 연도",
-                            monthPickerLabel = "종료 월",
-                            dayPickerLabel = "종료 일"
+                            yearPickerLabel = "End year",
+                            monthPickerLabel = "End month",
+                            dayPickerLabel = "End day"
                         )
                     )
                 )

@@ -83,7 +83,7 @@ internal fun IntegratedPickerScreen(
     var selectedTabIndex by remember { mutableIntStateOf(0) }
 
     val selectedDateText = remember(yearMonthState.selectedYear, yearMonthState.selectedMonth) {
-        "${yearMonthState.selectedYear}년 ${getMonthName(yearMonthState.selectedMonth)}"
+        "${getMonthName(yearMonthState.selectedMonth)} ${yearMonthState.selectedYear}"
     }
     val selectedTimeText =
         remember(timeState.selectedHour, timeState.selectedMinute, timeState.selectedPeriod) {
@@ -155,16 +155,16 @@ internal fun IntegratedPickerScreen(
                                     state = yearMonthState,
                                     spacingBetweenPickers = 8.dp,
                                     format = PickerDefaults.yearMonthPickerFormat(
-                                        yearItemText = { "${it}년" },
+                                        yearItemText = { "$it" },
                                         monthItemText = { getMonthName(it) },
-                                        yearItemContentDescription = { "${it}년" },
+                                        yearItemContentDescription = { "year $it" },
                                         monthItemContentDescription = { getMonthContentDescription(it) }
                                     ),
                                     semantics = PickerDefaults.yearMonthPickerSemantics(
-                                        yearPickerLabel = "연도",
-                                        monthPickerLabel = "월",
-                                        previousItemActionLabel = "이전 항목 선택",
-                                        nextItemActionLabel = "다음 항목 선택"
+                                        yearPickerLabel = "Year",
+                                        monthPickerLabel = "Month",
+                                        previousItemActionLabel = "Select previous value",
+                                        nextItemActionLabel = "Select next value"
                                     ),
                                     style = PickerDefaults.style(
                                         textStyles = PickerDefaults.textStyles(
@@ -191,16 +191,16 @@ internal fun IntegratedPickerScreen(
                                         hourItemText = { it.toString().padStart(2, '0') },
                                         minuteItemText = { it.toString().padStart(2, '0') },
                                         periodItemText = { getTimePeriodContentDescription(it) },
-                                        hourItemContentDescription = { "${it}시" },
-                                        minuteItemContentDescription = { "${it}분" },
+                                        hourItemContentDescription = { "$it hour" },
+                                        minuteItemContentDescription = { "$it minute" },
                                         periodItemContentDescription = { getTimePeriodContentDescription(it) }
                                     ),
                                     semantics = PickerDefaults.timePickerSemantics(
-                                        hourPickerLabel = "시간",
-                                        minutePickerLabel = "분",
-                                        periodPickerLabel = "오전/오후",
-                                        previousItemActionLabel = "이전 항목 선택",
-                                        nextItemActionLabel = "다음 항목 선택"
+                                        hourPickerLabel = "Hour",
+                                        minutePickerLabel = "Minute",
+                                        periodPickerLabel = "AM/PM",
+                                        previousItemActionLabel = "Select previous value",
+                                        nextItemActionLabel = "Select next value"
                                     ),
                                     style = PickerDefaults.style(
                                         textStyles = PickerDefaults.textStyles(

@@ -134,12 +134,12 @@ fun DatePickerSampleScreen(
                         userCallbackCount += 1
                     },
                     format = PickerDefaults.datePickerFormat(
-                        yearItemText = { "${it}년" },
+                        yearItemText = { "$it" },
                         monthItemText = { getMonthName(it) },
-                        dayItemText = { "${it}일" },
-                        yearItemContentDescription = { "${it}년" },
+                        dayItemText = { "$it" },
+                        yearItemContentDescription = { "year $it" },
                         monthItemContentDescription = { getMonthContentDescription(it) },
-                        dayItemContentDescription = { "${it}일" }
+                        dayItemContentDescription = { "day $it" }
                     ),
                     style = PickerDefaults.style(
                         visibleItemsCount = 3,
@@ -162,11 +162,11 @@ fun DatePickerSampleScreen(
                     ),
                     spacingBetweenPickers = 8.dp,
                     semantics = PickerDefaults.datePickerSemantics(
-                        yearPickerLabel = "연도",
-                        monthPickerLabel = "월",
-                        dayPickerLabel = "일",
-                        previousItemActionLabel = "이전 항목 선택",
-                        nextItemActionLabel = "다음 항목 선택"
+                        yearPickerLabel = "Year",
+                        monthPickerLabel = "Month",
+                        dayPickerLabel = "Day",
+                        previousItemActionLabel = "Select previous value",
+                        nextItemActionLabel = "Select next value"
                     )
                 )
             }

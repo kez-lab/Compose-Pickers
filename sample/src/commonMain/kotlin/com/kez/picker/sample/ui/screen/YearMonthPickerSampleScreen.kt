@@ -62,7 +62,7 @@ internal fun YearMonthPickerSampleScreen(
     // Calculate selected date text
     val selectedDateText by remember {
         derivedStateOf {
-            "${state.selectedYear}년 ${getMonthName(state.selectedMonth)}"
+            "${getMonthName(state.selectedMonth)} ${state.selectedYear}"
         }
     }
 
@@ -129,16 +129,16 @@ internal fun YearMonthPickerSampleScreen(
                     spacingBetweenPickers = 8.dp,
                     items = items,
                     format = PickerDefaults.yearMonthPickerFormat(
-                        yearItemText = { "${it}년" },
+                        yearItemText = { "$it" },
                         monthItemText = { getMonthName(it) },
-                        yearItemContentDescription = { "${it}년" },
+                        yearItemContentDescription = { "year $it" },
                         monthItemContentDescription = { getMonthContentDescription(it) }
                     ),
                     semantics = PickerDefaults.yearMonthPickerSemantics(
-                        yearPickerLabel = "연도",
-                        monthPickerLabel = "월",
-                        previousItemActionLabel = "이전 항목 선택",
-                        nextItemActionLabel = "다음 항목 선택"
+                        yearPickerLabel = "Year",
+                        monthPickerLabel = "Month",
+                        previousItemActionLabel = "Select previous value",
+                        nextItemActionLabel = "Select next value"
                     )
                 )
             }

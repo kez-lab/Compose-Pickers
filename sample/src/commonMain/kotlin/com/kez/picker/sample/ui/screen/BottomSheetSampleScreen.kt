@@ -76,7 +76,7 @@ internal fun BottomSheetSampleScreen(
     var selectedMinute by rememberSaveable { mutableIntStateOf(currentTime.minute) }
 
     val selectedDateText = remember(selectedYear, selectedMonth) {
-        "${selectedYear}년 ${getMonthName(selectedMonth)}"
+        "${getMonthName(selectedMonth)} ${selectedYear}"
     }
     val selectedTimeText = remember(selectedHour, selectedMinute) {
         formatTime12(LocalTime(selectedHour, selectedMinute))
@@ -102,8 +102,7 @@ internal fun BottomSheetSampleScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
                 .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 "Select date and time in bottom sheet",
@@ -111,7 +110,7 @@ internal fun BottomSheetSampleScreen(
                 fontWeight = FontWeight.Bold
             )
 
-            Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
             // Selected date/time format card
             Card(
@@ -249,16 +248,16 @@ internal fun BottomSheetSampleScreen(
                             state = yearMonthState,
                             spacingBetweenPickers = 8.dp,
                             format = PickerDefaults.yearMonthPickerFormat(
-                                yearItemText = { "${it}년" },
+                                yearItemText = { "$it" },
                                 monthItemText = { getMonthName(it) },
-                                yearItemContentDescription = { "${it}년" },
+                                yearItemContentDescription = { "year $it" },
                                 monthItemContentDescription = { getMonthContentDescription(it) }
                             ),
                             semantics = PickerDefaults.yearMonthPickerSemantics(
-                                yearPickerLabel = "연도",
-                                monthPickerLabel = "월",
-                                previousItemActionLabel = "이전 항목 선택",
-                                nextItemActionLabel = "다음 항목 선택"
+                                yearPickerLabel = "Year",
+                                monthPickerLabel = "Month",
+                                previousItemActionLabel = "Select previous value",
+                                nextItemActionLabel = "Select next value"
                             ),
                             style = PickerDefaults.style(
                                 textStyles = PickerDefaults.textStyles(
@@ -335,16 +334,16 @@ internal fun BottomSheetSampleScreen(
                                 hourItemText = { it.toString().padStart(2, '0') },
                                 minuteItemText = { it.toString().padStart(2, '0') },
                                 periodItemText = { getTimePeriodContentDescription(it) },
-                                hourItemContentDescription = { "${it}시" },
-                                minuteItemContentDescription = { "${it}분" },
+                                hourItemContentDescription = { "$it hour" },
+                                minuteItemContentDescription = { "$it minute" },
                                 periodItemContentDescription = { getTimePeriodContentDescription(it) }
                             ),
                             semantics = PickerDefaults.timePickerSemantics(
-                                hourPickerLabel = "시간",
-                                minutePickerLabel = "분",
-                                periodPickerLabel = "오전/오후",
-                                previousItemActionLabel = "이전 항목 선택",
-                                nextItemActionLabel = "다음 항목 선택"
+                                hourPickerLabel = "Hour",
+                                minutePickerLabel = "Minute",
+                                periodPickerLabel = "AM/PM",
+                                previousItemActionLabel = "Select previous value",
+                                nextItemActionLabel = "Select next value"
                             ),
                             style = PickerDefaults.style(
                                 textStyles = PickerDefaults.textStyles(

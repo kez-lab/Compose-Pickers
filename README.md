@@ -1,43 +1,94 @@
 # Compose Pickers
 
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.kez-lab/compose-date-time-picker?label=maven%20central)](https://central.sonatype.com/artifact/io.github.kez-lab/compose-date-time-picker)
+[![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](./LICENSE)
+[![Platforms](https://img.shields.io/badge/platforms-Android%20%7C%20iOS%20%7C%20Desktop%20%7C%20Web-4F46E5)](#)
 [![Read in Korean](https://img.shields.io/badge/README-Korean-green)](./README_KO.md)
 
-A controlled wheel selection and temporal picker library for Compose Multiplatform. It provides a
-generic `WheelPicker<T>` plus date/time presets with consistent APIs across Android, iOS, Desktop
-(JVM), and Web (Wasm).
+**Constraint-aware wheel selection for Compose Multiplatform.**
 
-## Features
-
-*   **Multiplatform Support**: seamless integration for Android, iOS, Desktop (JVM), and Web (Wasm).
-* **WheelPicker**: A controlled generic wheel with live value changes and a separate settled callback.
-*   **TimePicker**: Supports both 12-hour (AM/PM) and 24-hour formats.
-* **DurationPicker**: Selects one bounded elapsed duration through dependent hour/minute columns.
-* **Quantity + Unit repository sample only — not artifact API**: Demonstrates a non-temporal unit
-  change replacing quantity items, step, formatting, and semantics while committing one repaired
-  logical value.
-* **Date + Time repository sample only — not artifact API**: Demonstrates five dependent columns
-  committing one exact `LocalDateTime` across a midnight boundary.
-* **DatePicker**: A complete date picker for selecting year, month, and day with automatic day
-  validation.
-* **DateRangePicker**: An ordered start/end date picker for booking, filtering, and reporting flows.
-*   **YearMonthPicker**: A dedicated component for selecting years and months.
-*   **Customizable**: Extensible API with `PickerStyle` and format options for reusable UI configuration.
-* **State Management**: simplified state handling with `rememberTimePickerState`,
-  `rememberDurationPickerState`, `rememberDatePickerState`, `rememberDateRangePickerState`, and
-  `rememberYearMonthPickerState`.
-*   **Accessibility**: Built with accessibility semantics in mind, supporting screen readers and navigation.
-
-## Sample App
-
-The repository includes a Compose Multiplatform sample app with inspectable generic wheel,
-dependent quantity/unit, combined date-time, date, time, duration, and bottom sheet flows.
+One generic `WheelPicker<T>` for any list of values, plus date, time, and duration presets built on
+top of it. When several wheels depend on each other, the library keeps them in a single valid
+logical state instead of leaving your app to repair impossible combinations.
 
 <p align="center">
   <img src="docs/images/sample/sample-home.png" alt="Sample app home screen" width="23%" />
+  <img src="docs/images/sample/sample-wheel-picker.png" alt="Generic WheelPicker sample screen" width="23%" />
   <img src="docs/images/sample/sample-date-picker.png" alt="DatePicker sample screen" width="23%" />
   <img src="docs/images/sample/sample-time-picker.png" alt="TimePicker sample screen" width="23%" />
+</p>
+
+## Quick start
+
+Pick any list of values with the generic wheel:
+
+```kotlin
+var size by remember { mutableStateOf("Medium") }
+
+WheelPicker(
+    items = listOf("Small", "Medium", "Large"),
+    selectedItem = size,
+    onSelectedItemChange = { size = it }
+)
+```
+
+Or use a temporal preset, which owns its own state:
+
+```kotlin
+val state = rememberTimePickerState()
+
+TimePicker(
+    state = state,
+    onSelectedTimeChange = { time -> /* mirror into app state */ }
+)
+```
+
+Everything else on this page — bounds, custom item lists, styling, column order, accessibility
+labels, programmatic selection — is optional configuration on top of these two shapes.
+
+## What you get
+
+| Component | Use it for |
+| :--- | :--- |
+| `WheelPicker<T>` | Any single column of values, with live changes and a separate settled callback. |
+| `TimePicker` | 12-hour (AM/PM) or 24-hour time, with optional inclusive `minTime`/`maxTime`. |
+| `DatePicker` | Year, month, and day with automatic day repair and optional `minDate`/`maxDate`. |
+| `DateRangePicker` | Ordered start/end dates for booking, filtering, and reporting flows. |
+| `YearMonthPicker` | Year and month only, as a first-class `YearMonth` value. |
+| `DurationPicker` | One bounded elapsed duration across dependent hour/minute columns. |
+
+Every component is a controlled Compose API: state is saveable, user-driven changes arrive through a
+single `onSelected*Change` callback after dependent columns settle, and programmatic `state.select*`
+calls never fire that callback. Accessibility semantics (column labels, current value, previous/next
+actions, disabled state) are built in and localizable.
+
+Shared across all of them:
+
+- **Multiplatform**: Android, iOS, Desktop (JVM), and Web (Wasm) from one codebase.
+- **Customizable**: `PickerStyle`, format, layout, and semantics option objects instead of an
+  ever-growing parameter list.
+- **Constraint repair**: public `contains` / `coerce*` helpers so restored values and presets can be
+  normalized with the same rules the picker enforces.
+
+## Sample app
+
+The repository includes a Compose Multiplatform sample app covering the generic wheel, the temporal
+presets, dependent quantity/unit and date-time contracts, bottom sheet integration, and styling.
+
+```bash
+./gradlew :sample:desktopRun
+```
+
+<p align="center">
+  <img src="docs/images/sample/sample-duration-picker.png" alt="DurationPicker sample screen" width="23%" />
+  <img src="docs/images/sample/sample-date-range-picker.png" alt="DateRangePicker sample screen" width="23%" />
+  <img src="docs/images/sample/sample-year-month-picker.png" alt="YearMonthPicker sample screen" width="23%" />
   <img src="docs/images/sample/sample-bottom-sheet.png" alt="Bottom sheet picker sample screen" width="23%" />
 </p>
+
+Two of those flows — **Quantity + Unit** and **Exact Date-Time Slots** — are repository contract
+evidence only. They demonstrate dependent-column repair outside the date/time domain and are not
+part of the published artifact API.
 
 ## Installation
 
@@ -67,7 +118,7 @@ For release notes and upgrade-impact details, see [CHANGELOG.md](CHANGELOG.md).
 
 ## Usage
 
-> The examples below target the current `main` branch API. They may require post-`0.6.0` APIs that are not available in the public Maven Central artifact yet.
+> The examples below target the current `main` branch API, which is not published yet. See the release-status note under [Installation](#installation).
 
 ### State and Callback Pattern
 
