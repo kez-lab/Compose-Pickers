@@ -17,6 +17,15 @@ This project tracks notable user-facing and maintainer-facing changes here. The 
   adoption-evidence migration gate on 2026-08-05, and the pre-rename exact-name collision check for
   `compose-pickers` was repeated on the same date with no conflicts found.
 
+### Fixed
+
+- Fixed `DurationPicker` looping its hour and minute columns instead of stopping at the source
+  bounds. A duration is a bounded elapsed quantity, not a cyclic one, but both columns used the
+  default infinite scroll, so a small `hourItems` source (for example `listOf(0, 1)`) rendered as
+  0 h / 1 h / 0 h / 1 h / 0 h with the same value appearing above and below the selection. Both
+  columns now scroll bounded, matching how `TimePicker`'s AM/PM column and `DatePicker`'s year and
+  day columns already treat non-cyclic values.
+
 ### Added
 
 - Added a browser demo of the sample app, published to GitHub Pages from the Kotlin/Wasm build on

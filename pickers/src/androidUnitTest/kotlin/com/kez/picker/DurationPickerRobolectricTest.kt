@@ -86,6 +86,38 @@ class DurationPickerRobolectricTest {
     }
 
     @Test
+    fun hourColumnScrollsBoundedInsteadOfLooping() {
+        lateinit var state: DurationPickerState
+        val items = PickerDefaults.durationPickerItems(
+            hourItems = listOf(0, 1),
+            minuteItems = (0..55 step 5).toList(),
+            maxDuration = 90.minutes
+        )
+
+        composeRule.setContent {
+            state = rememberDurationPickerState(items = items, initialDuration = 45.minutes)
+            DurationPicker(
+                state = state,
+                items = items,
+                style = PickerDefaults.style(visibleItemsCount = 5),
+                format = testDurationFormat(),
+                semantics = testDurationSemantics()
+            )
+        }
+
+        // hourItems has only two values, fewer than the five visible rows. A looping/infinite
+        // wheel fills the extra rows by repeating the two values, so the unselected "1 hours" row
+        // renders twice: once above and once below the selected "0 hours" row. A bounded wheel
+        // pads the extra rows with empty space instead, so "1 hours" renders exactly once.
+        composeRule.runOnIdle {
+            assertEquals(
+                1,
+                composeRule.onAllNodes(hasContentDescription("Hours: 1 hours")).fetchSemanticsNodes().size
+            )
+        }
+    }
+
+    @Test
     fun programmaticSelectionCancelsInFlightUserSettleWithoutCallback() {
         lateinit var state: DurationPickerState
         val committedDurations = mutableListOf<Duration>()
