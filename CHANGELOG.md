@@ -17,8 +17,15 @@ This project tracks notable user-facing and maintainer-facing changes here. The 
   adoption-evidence migration gate on 2026-08-05, and the pre-rename exact-name collision check for
   `compose-pickers` was repeated on the same date with no conflicts found.
 
+### Added
+
+- Added a browser demo of the sample app, published to GitHub Pages from the Kotlin/Wasm build on
+  every push to `main` and linked from both READMEs.
+
 ### Changed
 
+- Removed the stale `<script src="skiko.js">` tag from the Wasm sample page. Skiko ships inside the
+  application bundle, so that tag only produced a 404 on every page load.
 - Rewrote `README.md` and `README_KO.md` around the generic `WheelPicker<T>` foundation: the page
   now opens with a one-line positioning statement, a short quick-start for the generic wheel and one
   temporal preset, and a component table. Bounds, custom item lists, styling, column order, and
