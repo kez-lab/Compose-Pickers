@@ -3,7 +3,7 @@
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.kez-lab/compose-date-time-picker?label=maven%20central)](https://central.sonatype.com/artifact/io.github.kez-lab/compose-date-time-picker)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](./LICENSE)
 [![Platforms](https://img.shields.io/badge/platforms-Android%20%7C%20iOS%20%7C%20Desktop%20%7C%20Web-4F46E5)](#)
-[![Live demo](https://img.shields.io/badge/live%20demo-try%20it%20in%20your%20browser-4F46E5)](https://kez-lab.github.io/Compose-Pickers/)
+[![Live demo](https://img.shields.io/badge/live%20demo-try%20it%20in%20your%20browser-4F46E5)](https://kez-lab.org/Compose-Pickers/)
 [![Read in Korean](https://img.shields.io/badge/README-Korean-green)](./README_KO.md)
 
 **Constraint-aware wheel selection for Compose Multiplatform.**
@@ -12,7 +12,7 @@ One generic `WheelPicker<T>` for any list of values, plus date, time, and durati
 top of it. When several wheels depend on each other, the library keeps them in a single valid
 logical state instead of leaving your app to repair impossible combinations.
 
-**[▶ Try the live demo](https://kez-lab.github.io/Compose-Pickers/)** — the sample app running in your browser via Kotlin/Wasm.
+**[▶ Try the live demo](https://kez-lab.org/Compose-Pickers/)** — the sample app running in your browser via Kotlin/Wasm.
 
 <p align="center">
   <img src="docs/images/sample/sample-home.png" alt="Sample app home screen" width="23%" />
@@ -82,7 +82,7 @@ presets, dependent quantity/unit and date-time contracts, bottom sheet integrati
 ./gradlew :sample:desktopRun
 ```
 
-The same app is deployed to [GitHub Pages](https://kez-lab.github.io/Compose-Pickers/) on every push to `main`, so you can try the
+The same app is deployed to [GitHub Pages](https://kez-lab.org/Compose-Pickers/) on every push to `main`, so you can try the
 pickers without building anything.
 
 <p align="center">

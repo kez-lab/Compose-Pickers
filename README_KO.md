@@ -3,7 +3,7 @@
 [![Maven Central](https://img.shields.io/maven-central/v/io.github.kez-lab/compose-date-time-picker?label=maven%20central)](https://central.sonatype.com/artifact/io.github.kez-lab/compose-date-time-picker)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](./LICENSE)
 [![Platforms](https://img.shields.io/badge/platforms-Android%20%7C%20iOS%20%7C%20Desktop%20%7C%20Web-4F46E5)](#)
-[![Live demo](https://img.shields.io/badge/live%20demo-%EB%B8%8C%EB%9D%BC%EC%9A%B0%EC%A0%80%EC%97%90%EC%84%9C%20%EC%B2%B4%ED%97%98-4F46E5)](https://kez-lab.github.io/Compose-Pickers/)
+[![Live demo](https://img.shields.io/badge/live%20demo-%EB%B8%8C%EB%9D%BC%EC%9A%B0%EC%A0%80%EC%97%90%EC%84%9C%20%EC%B2%B4%ED%97%98-4F46E5)](https://kez-lab.org/Compose-Pickers/)
 [![Read in English](https://img.shields.io/badge/README-English-blue)](./README.md)
 
 **Compose Multiplatform을 위한 constraint-aware wheel selection 라이브러리입니다.**
@@ -12,7 +12,7 @@
 제공합니다. 여러 wheel이 서로 의존할 때 불가능한 조합을 앱이 직접 보정하도록 떠넘기지 않고, 라이브러리가
 하나의 유효한 논리 상태로 유지합니다.
 
-**[▶ 라이브 데모 열기](https://kez-lab.github.io/Compose-Pickers/)** — Kotlin/Wasm으로 브라우저에서 바로 실행되는 샘플 앱입니다.
+**[▶ 라이브 데모 열기](https://kez-lab.org/Compose-Pickers/)** — Kotlin/Wasm으로 브라우저에서 바로 실행되는 샘플 앱입니다.
 
 <p align="center">
   <img src="docs/images/sample/sample-home.png" alt="샘플 앱 홈 화면" width="23%" />
@@ -82,7 +82,7 @@ callback을 발생시키지 않습니다. 접근성 semantics(column label, 현�
 ./gradlew :sample:desktopRun
 ```
 
-같은 앱이 `main`에 푸시될 때마다 [GitHub Pages](https://kez-lab.github.io/Compose-Pickers/)에 배포되므로, 아무것도 빌드하지 않고
+같은 앱이 `main`에 푸시될 때마다 [GitHub Pages](https://kez-lab.org/Compose-Pickers/)에 배포되므로, 아무것도 빌드하지 않고
 바로 사용해 볼 수 있습니다.
 
 <p align="center">
