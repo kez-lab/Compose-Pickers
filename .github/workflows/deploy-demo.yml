@@ -1,0 +1,61 @@
+name: Deploy Web Demo
+
+# Builds the Compose Multiplatform sample for Kotlin/Wasm and publishes it to GitHub Pages.
+# This is a single-target build, so it is fast enough to run on every push to main, unlike the
+# full verification matrix in integration-build-test.yml.
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'pickers/src/**'
+      - 'sample/src/**'
+      - '**/*.gradle.kts'
+      - 'gradle/libs.versions.toml'
+      - '.github/workflows/deploy-demo.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: gradle/wrapper-validation-action@v2
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Build Wasm distribution
+        run: ./gradlew :sample:wasmJsBrowserDistribution --no-daemon
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: sample/build/dist/wasmJs/productionExecutable
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
