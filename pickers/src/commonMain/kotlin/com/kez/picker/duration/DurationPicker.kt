@@ -148,6 +148,7 @@ fun DurationPicker(
                                     enabled = enabled,
                                     format = format.hour,
                                     style = columnStyle,
+                                    isInfinity = false,
                                     semantics = semantics.hour
                                 )
 
@@ -164,6 +165,7 @@ fun DurationPicker(
                                     enabled = enabled,
                                     format = format.minute,
                                     style = columnStyle,
+                                    isInfinity = false,
                                     semantics = semantics.minute
                                 )
                             }
