@@ -2,6 +2,11 @@ name: Publish Release
 
 on:
   workflow_dispatch:
+    inputs:
+      release_tag:
+        description: "Annotated release tag matching VERSION_NAME (for example, 0.7.0)"
+        required: true
+        type: string
 
 jobs:
   publish-release:
@@ -12,6 +17,9 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.release_tag }}
+          fetch-depth: 0
       - uses: gradle/wrapper-validation-action@v2
 
       - name: Set up JDK 17
@@ -21,13 +29,38 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
-      - name: Ensure this isn't a -SNAPSHOT version
+      - name: Validate release tag and version
+        env:
+          RELEASE_TAG: ${{ inputs.release_tag }}
         run: |
+          if ! git check-ref-format --allow-onelevel "refs/tags/$RELEASE_TAG"; then
+            echo "release_tag must be a valid tag name: $RELEASE_TAG"
+            exit 1
+          fi
+
+          if [[ "$(git cat-file -t "$RELEASE_TAG")" != "tag" ]]; then
+            echo "release_tag must be an annotated tag: $RELEASE_TAG"
+            exit 1
+          fi
+
+          git fetch origin main:refs/remotes/origin/main
+          TAG_COMMIT=$(git rev-list -n 1 "$RELEASE_TAG")
+          if ! git merge-base --is-ancestor "$TAG_COMMIT" origin/main; then
+            echo "release_tag must point to a commit reachable from origin/main: $RELEASE_TAG"
+            exit 1
+          fi
+
           VERSION=$(./gradlew -q printVersion | tail -1)
           if [[ $VERSION == *"-SNAPSHOT" ]]; then
             echo "Cannot publish a SNAPSHOT version ($VERSION) as a release"
             exit 1
           fi
+
+          if [[ "$VERSION" != "$RELEASE_TAG" ]]; then
+            echo "release_tag ($RELEASE_TAG) must exactly match VERSION_NAME ($VERSION)"
+            exit 1
+          fi
+
           echo "Publishing version: $VERSION"
 
       - name: Publish Release
