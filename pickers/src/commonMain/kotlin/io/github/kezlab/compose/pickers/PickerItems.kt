@@ -1,0 +1,746 @@
+package io.github.kezlab.compose.pickers
+
+import io.github.kezlab.compose.pickers.date.DateRange
+import io.github.kezlab.compose.pickers.date.YearMonth
+import io.github.kezlab.compose.pickers.date.daysInMonth
+import io.github.kezlab.compose.pickers.util.TimeFormat
+import io.github.kezlab.compose.pickers.util.TimePeriod
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalTime
+import kotlinx.datetime.Month
+import kotlinx.datetime.number
+import kotlin.math.abs
+
+/**
+ * Time constraints applied by [TimePickerItems].
+ *
+ * @param minTime The earliest selectable time, inclusive. Pass null to omit the lower bound.
+ * @param maxTime The latest selectable time, inclusive. Pass null to omit the upper bound.
+ */
+data class TimePickerConstraints(
+    val minTime: LocalTime? = null,
+    val maxTime: LocalTime? = null
+) {
+    init {
+        if (minTime != null && maxTime != null) {
+            require(minTime <= maxTime) {
+                "TimePicker minTime must be on or before maxTime. minTime=$minTime, " +
+                        "maxTime=$maxTime. If app input can arrive in either order, sort it " +
+                        "before creating TimePickerConstraints."
+            }
+        }
+    }
+
+    /**
+     * Returns whether [time] is inside the configured inclusive bounds.
+     */
+    fun contains(time: LocalTime): Boolean =
+        (minTime == null || time >= minTime) &&
+                (maxTime == null || time <= maxTime)
+}
+
+/**
+ * Selectable item lists for [io.github.kezlab.compose.pickers.time.TimePicker].
+ *
+ * Lists must be non-empty, contain distinct values, stay within their documented ranges, and contain
+ * the current state selection for the active time format. [constraints] are applied after the hour,
+ * minute, and period item lists. Treat item lists as immutable after passing them to a picker; create
+ * a new [TimePickerItems] when available values change.
+ *
+ * @param minuteItems Minute values available for selection. Values must be in 0..59.
+ * @param hour24Items Hour values available when using 24-hour time. Values must be in 0..23.
+ * @param hour12Items Display-hour values available when using 12-hour time. Values must be in 1..12.
+ * @param periodItems AM/PM values available when using 12-hour time.
+ * @param constraints Inclusive time bounds applied after the hour, minute, and period item lists.
+ * @see PickerDefaults.timePickerItems
+ */
+data class TimePickerItems(
+    val minuteItems: List<Int>,
+    val hour24Items: List<Int>,
+    val hour12Items: List<Int>,
+    val periodItems: List<TimePeriod>,
+    val constraints: TimePickerConstraints = TimePickerConstraints()
+) {
+    /**
+     * Returns whether [time] is directly selectable under [timeFormat].
+     *
+     * This predicate does not validate the item-list configuration; it only checks membership.
+     */
+    fun contains(time: LocalTime, timeFormat: TimeFormat = TimeFormat.HOUR_24): Boolean {
+        if (time.minute !in minuteItems) return false
+        return constraints.contains(time) && when (timeFormat) {
+            TimeFormat.HOUR_24 -> time.hour in hour24Items
+            TimeFormat.HOUR_12 ->
+                displayHourFor(time.hour) in hour12Items &&
+                        periodFor(time.hour) in periodItems
+        }
+    }
+
+    /**
+     * Returns whether [hour] and [minute] are directly selectable under [timeFormat].
+     *
+     * [hour] is interpreted as hour-of-day in `0..23`. Values outside the supported hour or minute
+     * ranges return false.
+     */
+    fun contains(
+        hour: Int,
+        minute: Int,
+        timeFormat: TimeFormat = TimeFormat.HOUR_24
+    ): Boolean {
+        if (hour !in 0..23 || minute !in 0..59) return false
+        return contains(
+            time = LocalTime(hour = hour, minute = minute),
+            timeFormat = timeFormat
+        )
+    }
+
+    /**
+     * Returns whether [displayHour], [minute], and [period] are directly selectable in 12-hour mode.
+     *
+     * [displayHour] is interpreted as the format-hour shown to users in `1..12`. Values outside the
+     * supported display-hour or minute ranges return false.
+     */
+    fun contains(displayHour: Int, minute: Int, period: TimePeriod): Boolean {
+        if (displayHour !in 1..12 || minute !in 0..59) return false
+        return contains(
+            time = displayTimeFromParts(
+                displayHour = displayHour,
+                minute = minute,
+                period = period
+            ),
+            timeFormat = TimeFormat.HOUR_12
+        )
+    }
+
+    /**
+     * Returns the closest selectable time for [time] under [timeFormat].
+     *
+     * This is useful before calling [io.github.kezlab.compose.pickers.time.TimePickerState.selectTime] when app-owned
+     * state can contain values outside custom picker lists.
+     *
+     * @throws IllegalArgumentException if the item lists needed by [timeFormat] are empty, contain
+     * duplicates, or contain values outside their supported ranges.
+     */
+    fun coerceTime(time: LocalTime, timeFormat: TimeFormat = TimeFormat.HOUR_24): LocalTime {
+        requireValid(timeFormat)
+        return selectableTimesFor(timeFormat).closestTo(time)
+    }
+
+    /**
+     * Returns the closest selectable time for [hour] and [minute] under [timeFormat].
+     *
+     * [hour] is interpreted as hour-of-day in `0..23`.
+     *
+     * @throws IllegalArgumentException if [hour] or [minute] is outside the supported range, or if
+     * the item lists needed by [timeFormat] are invalid.
+     */
+    fun coerceTime(
+        hour: Int,
+        minute: Int,
+        timeFormat: TimeFormat = TimeFormat.HOUR_24
+    ): LocalTime =
+        coerceTime(
+            time = LocalTime(hour = hour, minute = minute),
+            timeFormat = timeFormat
+        )
+
+    /**
+     * Returns the closest selectable time for a 12-hour display value.
+     *
+     * [displayHour] is interpreted as the format-hour shown to users in `1..12`; [period] supplies
+     * AM/PM. This is useful when app-owned form or preset values are stored as a display hour plus
+     * period instead of a 24-hour [LocalTime].
+     *
+     * @throws IllegalArgumentException if [displayHour] is outside `1..12`, [minute] is outside
+     * `0..59`, or the 12-hour item lists are invalid.
+     */
+    fun coerceTime(displayHour: Int, minute: Int, period: TimePeriod): LocalTime =
+        coerceTime(
+            time = displayTimeFromParts(
+                displayHour = displayHour,
+                minute = minute,
+                period = period
+            ),
+            timeFormat = TimeFormat.HOUR_12
+        )
+
+    internal fun hourItemsFor(timeFormat: TimeFormat): List<Int> =
+        when (timeFormat) {
+            TimeFormat.HOUR_12 -> hour12Items
+            TimeFormat.HOUR_24 -> hour24Items
+        }
+
+    internal fun selectablePeriodItems(): List<TimePeriod> =
+        periodItems.filter { period ->
+            hour12Items.any { hour ->
+                selectableMinuteItemsFor(hourOfDay = hourOfDayFor(hour, period)).isNotEmpty()
+            }
+        }
+
+    internal fun selectableHourItemsFor(
+        timeFormat: TimeFormat,
+        period: TimePeriod = TimePeriod.AM
+    ): List<Int> =
+        when (timeFormat) {
+            TimeFormat.HOUR_24 -> hour24Items.filter { hour ->
+                selectableMinuteItemsFor(hourOfDay = hour).isNotEmpty()
+            }
+
+            TimeFormat.HOUR_12 -> hour12Items.filter { hour ->
+                selectableMinuteItemsFor(hourOfDay = hourOfDayFor(hour, period)).isNotEmpty()
+            }
+        }
+
+    internal fun selectableMinuteItemsFor(hourOfDay: Int): List<Int> =
+        minuteItems.filter { minute ->
+            constraints.contains(LocalTime(hour = hourOfDay, minute = minute))
+        }
+
+    private fun selectableTimesFor(timeFormat: TimeFormat): List<LocalTime> =
+        when (timeFormat) {
+            TimeFormat.HOUR_24 -> hour24Items.flatMap { hour ->
+                selectableMinuteItemsFor(hourOfDay = hour).map { minute ->
+                    LocalTime(hour = hour, minute = minute)
+                }
+            }
+
+            TimeFormat.HOUR_12 -> periodItems.flatMap { period ->
+                hour12Items.flatMap { hour ->
+                    val hourOfDay = hourOfDayFor(displayHour = hour, period = period)
+                    selectableMinuteItemsFor(hourOfDay = hourOfDay).map { minute ->
+                        LocalTime(hour = hourOfDay, minute = minute)
+                    }
+                }
+            }
+        }
+
+    private fun List<LocalTime>.closestTo(time: LocalTime): LocalTime =
+        minWith(
+            compareBy<LocalTime> { abs(it.toMinuteOfDay() - time.toMinuteOfDay()) }
+                .thenBy { it.toMinuteOfDay() }
+        )
+
+    private fun LocalTime.toMinuteOfDay(): Int = hour * 60 + minute
+
+    private fun requireValid(timeFormat: TimeFormat) {
+        minuteItems.requireIntItems(name = "TimePicker minuteItems", range = 0..59)
+        when (timeFormat) {
+            TimeFormat.HOUR_24 -> hour24Items.requireIntItems(
+                name = "TimePicker hour24Items",
+                range = 0..23
+            )
+
+            TimeFormat.HOUR_12 -> {
+                hour12Items.requireIntItems(name = "TimePicker hour12Items", range = 1..12)
+                periodItems.requireItems(name = "TimePicker periodItems")
+            }
+        }
+        val hasSelectableTime = when (timeFormat) {
+            TimeFormat.HOUR_24 -> selectableHourItemsFor(timeFormat = timeFormat).isNotEmpty()
+            TimeFormat.HOUR_12 -> selectablePeriodItems().isNotEmpty()
+        }
+        require(hasSelectableTime) {
+            "TimePicker items must contain at least one time allowed by constraints. Adjust " +
+                    "minTime/maxTime or include at least one hour/minute/period combination " +
+                    "inside the allowed range."
+        }
+    }
+}
+
+/**
+ * Date constraints applied by [DatePickerItems].
+ *
+ * @param minDate The earliest selectable date, inclusive. Pass null to omit the lower bound.
+ * @param maxDate The latest selectable date, inclusive. Pass null to omit the upper bound.
+ */
+data class DatePickerConstraints(
+    val minDate: LocalDate? = null,
+    val maxDate: LocalDate? = null
+) {
+    init {
+        if (minDate != null && maxDate != null) {
+            require(minDate <= maxDate) {
+                "DatePicker minDate must be on or before maxDate. minDate=$minDate, " +
+                        "maxDate=$maxDate. If app input can arrive in either order, sort it " +
+                        "before creating DatePickerConstraints."
+            }
+        }
+    }
+
+    /**
+     * Returns whether [date] is inside the configured inclusive bounds.
+     */
+    fun contains(date: LocalDate): Boolean =
+        (minDate == null || date >= minDate) &&
+                (maxDate == null || date <= maxDate)
+
+    internal val isUnbounded: Boolean
+        get() = minDate == null && maxDate == null
+}
+
+/**
+ * Selectable item lists for [io.github.kezlab.compose.pickers.date.DatePicker].
+ *
+ * Lists must be non-empty, contain distinct values, stay within their documented ranges, and contain
+ * the current state selection. [dayItems] is filtered by the selected year/month maximum day and
+ * [constraints] before rendering. Treat item lists as immutable after passing them to a picker; create
+ * a new [DatePickerItems] when available values change.
+ *
+ * @param yearItems Year values available for selection. Values must be in 1000..9999.
+ * @param monthItems Month values available for selection. Values must be in 1..12.
+ * @param dayItems Day values available for selection. Values must be in 1..31.
+ * @param constraints Inclusive date bounds applied after the year, month, and day item lists.
+ * @see PickerDefaults.datePickerItems
+ */
+data class DatePickerItems(
+    val yearItems: List<Int>,
+    val monthItems: List<Int>,
+    val dayItems: List<Int>,
+    val constraints: DatePickerConstraints = DatePickerConstraints()
+) {
+    /**
+     * Returns whether [date] is directly selectable.
+     *
+     * [dayItems] is checked after the selected year/month maximum day and [constraints] are applied.
+     */
+    fun contains(date: LocalDate): Boolean {
+        val month = date.month.number
+        return date.year in yearItems &&
+                month in monthItems &&
+                date.day <= daysInMonth(date.year, month) &&
+                date.day in dayItems &&
+                constraints.contains(date)
+    }
+
+    /**
+     * Returns whether [year], [month], and [day] are directly selectable.
+     *
+     * Values outside the supported year, month, or day ranges return false. A [day] greater than the
+     * maximum valid day for [year] and [month] also returns false.
+     */
+    fun contains(year: Int, month: Int, day: Int): Boolean {
+        if (year !in 1000..9999 || month !in 1..12 || day < 1) return false
+        if (day > daysInMonth(year, month)) return false
+        return contains(LocalDate(year = year, month = month, day = day))
+    }
+
+    /**
+     * Returns whether both boundaries of [dateRange] are directly selectable.
+     *
+     * This checks the start and end dates used by [io.github.kezlab.compose.pickers.date.DateRangePicker]. It does not
+     * require every date inside [dateRange] to appear in [dayItems].
+     */
+    fun contains(dateRange: DateRange): Boolean =
+        contains(startDate = dateRange.startDate, endDate = dateRange.endDate)
+
+    /**
+     * Returns whether [startDate] and [endDate] are directly selectable range boundaries.
+     *
+     * Unlike [DateRange], this overload accepts unordered inputs. The result only checks whether
+     * both provided boundary dates are selectable; it does not require every date between them to
+     * appear in [dayItems].
+     */
+    fun contains(startDate: LocalDate, endDate: LocalDate): Boolean =
+        contains(startDate) && contains(endDate)
+
+    /**
+     * Returns whether explicit start and end date parts are directly selectable range boundaries.
+     *
+     * Values outside the supported year, month, or day ranges return false. A day greater than the
+     * maximum valid day for its year and month also returns false.
+     */
+    fun contains(
+        startYear: Int,
+        startMonth: Int,
+        startDay: Int,
+        endYear: Int,
+        endMonth: Int,
+        endDay: Int
+    ): Boolean {
+        if (!contains(startYear, startMonth, startDay)) return false
+        return contains(endYear, endMonth, endDay)
+    }
+
+    /**
+     * Returns the closest selectable date for [date].
+     *
+     * Candidate dates are compared as whole [LocalDate] values instead of independently coercing
+     * year, month, and day. If two dates are equally close, the earlier date is returned.
+     *
+     * @throws IllegalArgumentException if the configured item lists are empty, contain duplicates,
+     * contain values outside their supported ranges, or cannot provide at least one valid day for every
+     * selectable year/month combination.
+     */
+    fun coerceDate(date: LocalDate): LocalDate {
+        requireValid()
+        return closestSelectableDateTo(date)
+    }
+
+    /**
+     * Returns the closest selectable date for [year], [month], and [day].
+     *
+     * If [day] is greater than the maximum day for [year] and [month], it is clamped before applying
+     * this item's selectable values and date bounds.
+     *
+     * @throws IllegalArgumentException if [year] or [month] is outside the supported range, if [day]
+     * is less than 1, or if the configured item lists are invalid.
+     */
+    fun coerceDate(year: Int, month: Int, day: Int): LocalDate =
+        coerceDate(dateFromParts(year = year, month = month, day = day))
+
+    /**
+     * Returns the closest selectable ordered date range for [dateRange].
+     *
+     * Start and end dates are coerced independently using [coerceDate], then ordered so the returned
+     * [DateRange] always has `startDate <= endDate`. This is useful before creating
+     * [io.github.kezlab.compose.pickers.date.DateRangePickerState] or applying app-owned range presets with custom
+     * picker items.
+     *
+     * @throws IllegalArgumentException if the configured item lists are invalid.
+     */
+    fun coerceDateRange(dateRange: DateRange): DateRange =
+        coerceDateRange(
+            startDate = dateRange.startDate,
+            endDate = dateRange.endDate
+        )
+
+    /**
+     * Returns the closest selectable ordered date range for [startDate] and [endDate].
+     *
+     * Unlike [DateRange], this overload accepts unordered inputs so apps can normalize form,
+     * restored, or preset values in one step.
+     *
+     * @throws IllegalArgumentException if the configured item lists are invalid.
+     */
+    fun coerceDateRange(startDate: LocalDate, endDate: LocalDate): DateRange =
+        DateRange.ordered(
+            startDate = coerceDate(startDate),
+            endDate = coerceDate(endDate)
+        )
+
+    /**
+     * Returns the closest selectable ordered date range for explicit start and end date parts.
+     *
+     * If a day is greater than the maximum day for its year/month, it is clamped before applying this
+     * item's selectable values and date bounds.
+     *
+     * @throws IllegalArgumentException if any year/month/day value is outside its supported range, or
+     * if the configured item lists are invalid.
+     */
+    fun coerceDateRange(
+        startYear: Int,
+        startMonth: Int,
+        startDay: Int,
+        endYear: Int,
+        endMonth: Int,
+        endDay: Int
+    ): DateRange =
+        coerceDateRange(
+            startDate = dateFromParts(year = startYear, month = startMonth, day = startDay),
+            endDate = dateFromParts(year = endYear, month = endMonth, day = endDay)
+        )
+
+    internal fun selectableYearItems(): List<Int> =
+        yearItems.filter { year ->
+            monthItems.any { month -> selectableDayItemsFor(year = year, month = month).isNotEmpty() }
+        }
+
+    internal fun selectableMonthItemsFor(year: Int): List<Int> =
+        monthItems.filter { month ->
+            selectableDayItemsFor(year = year, month = month).isNotEmpty()
+        }
+
+    internal fun selectableDayItemsFor(year: Int, month: Int): List<Int> =
+        dayItems.filter { day ->
+            day <= daysInMonth(year, month) &&
+                    constraints.contains(LocalDate(year = year, month = monthFor(month), day = day))
+        }
+
+    private fun closestSelectableDateTo(date: LocalDate): LocalDate {
+        val targetEpochDay = date.toEpochDays()
+        return candidateYearsNear(date.year)
+            .flatMap { selectableDatesForYear(it) }
+            .minWith(
+                compareBy<LocalDate> { abs(it.toEpochDays() - targetEpochDay) }
+                    .thenBy { it.toEpochDays() }
+            )
+    }
+
+    private fun candidateYearsNear(year: Int): List<Int> {
+        val sortedYears = yearItems.sorted()
+        val sameYearIndex = sortedYears.binarySearch(year)
+        val insertionIndex = if (sameYearIndex >= 0) sameYearIndex else -sameYearIndex - 1
+        val sameYear = sortedYears.getOrNull(sameYearIndex)
+            ?.takeIf { hasSelectableDateInYear(it) }
+        val previousYear = sortedYears.closestSelectableYearBefore(
+            startIndex = if (sameYearIndex >= 0) sameYearIndex - 1 else insertionIndex - 1
+        )
+        val nextYear = sortedYears.closestSelectableYearAfter(
+            startIndex = if (sameYearIndex >= 0) sameYearIndex + 1 else insertionIndex
+        )
+        return listOfNotNull(previousYear, sameYear, nextYear)
+    }
+
+    private fun List<Int>.closestSelectableYearBefore(startIndex: Int): Int? {
+        var index = startIndex
+        while (index >= 0) {
+            val candidateYear = this[index]
+            if (hasSelectableDateInYear(candidateYear)) return candidateYear
+            index--
+        }
+        return null
+    }
+
+    private fun List<Int>.closestSelectableYearAfter(startIndex: Int): Int? {
+        var index = startIndex
+        while (index < size) {
+            val candidateYear = this[index]
+            if (hasSelectableDateInYear(candidateYear)) return candidateYear
+            index++
+        }
+        return null
+    }
+
+    private fun hasSelectableDateInYear(year: Int): Boolean =
+        monthItems.any { month ->
+            selectableDayItemsFor(year = year, month = month).isNotEmpty()
+        }
+
+    private fun selectableDatesForYear(year: Int): List<LocalDate> =
+        monthItems.flatMap { month ->
+            selectableDayItemsFor(year = year, month = month).map { day ->
+                LocalDate(year = year, month = monthFor(month), day = day)
+            }
+        }
+
+    private fun requireValid() {
+        yearItems.requireIntItems(name = "DatePicker yearItems", range = 1000..9999)
+        monthItems.requireIntItems(name = "DatePicker monthItems", range = 1..12)
+        dayItems.requireIntItems(name = "DatePicker dayItems", range = 1..31)
+        if (constraints.isUnbounded) {
+            val minimumMaxDay = monthItems.minOf { month ->
+                when (month) {
+                    2 -> if (yearItems.any { daysInMonth(it, month) == 28 }) 28 else 29
+                    4, 6, 9, 11 -> 30
+                    else -> 31
+                }
+            }
+            require(dayItems.any { it <= minimumMaxDay }) {
+                "DatePicker dayItems must contain at least one day valid for every selectable " +
+                        "year/month combination. Smallest maximum day is $minimumMaxDay."
+            }
+        }
+        require(yearItems.any { hasSelectableDateInYear(it) }) {
+            "DatePicker items must contain at least one date allowed by constraints. Adjust " +
+                    "minDate/maxDate or include at least one matching year/month/day item " +
+                    "inside the allowed range."
+        }
+    }
+}
+
+/**
+ * Year/month constraints applied by [YearMonthPickerItems].
+ *
+ * @param minYearMonth The earliest selectable year/month, inclusive. Pass null to omit the lower bound.
+ * @param maxYearMonth The latest selectable year/month, inclusive. Pass null to omit the upper bound.
+ */
+data class YearMonthPickerConstraints(
+    val minYearMonth: YearMonth? = null,
+    val maxYearMonth: YearMonth? = null
+) {
+    init {
+        if (minYearMonth != null && maxYearMonth != null) {
+            require(minYearMonth <= maxYearMonth) {
+                "YearMonthPicker minYearMonth must be on or before maxYearMonth. " +
+                        "minYearMonth=$minYearMonth, maxYearMonth=$maxYearMonth. If app input " +
+                        "can arrive in either order, sort it before creating " +
+                        "YearMonthPickerConstraints."
+            }
+        }
+    }
+
+    /**
+     * Returns whether [yearMonth] is inside the configured inclusive bounds.
+     */
+    fun contains(yearMonth: YearMonth): Boolean =
+        (minYearMonth == null || yearMonth >= minYearMonth) &&
+                (maxYearMonth == null || yearMonth <= maxYearMonth)
+}
+
+/**
+ * Selectable item lists for [io.github.kezlab.compose.pickers.date.YearMonthPicker].
+ *
+ * Lists must be non-empty, contain distinct values, stay within their documented ranges, and contain
+ * the current state selection. [constraints] are applied after year and month item lists. Treat item
+ * lists as immutable after passing them to a picker; create a new [YearMonthPickerItems] when
+ * available values change.
+ *
+ * @param yearItems Year values available for selection. Values must be in 1000..9999.
+ * @param monthItems Month values available for selection. Values must be in 1..12.
+ * @param constraints Inclusive year/month bounds applied after the year and month item lists.
+ * @see PickerDefaults.yearMonthPickerItems
+ */
+data class YearMonthPickerItems(
+    val yearItems: List<Int>,
+    val monthItems: List<Int>,
+    val constraints: YearMonthPickerConstraints = YearMonthPickerConstraints()
+) {
+    /**
+     * Returns whether [yearMonth] is directly selectable.
+     */
+    fun contains(yearMonth: YearMonth): Boolean =
+        contains(year = yearMonth.year, month = yearMonth.month)
+
+    /**
+     * Returns whether [year] and [month] are directly selectable.
+     *
+     * Values outside the supported year or month ranges return false.
+     */
+    fun contains(year: Int, month: Int): Boolean {
+        if (year !in 1000..9999 || month !in 1..12) return false
+        return year in yearItems &&
+                month in monthItems &&
+                constraints.contains(YearMonth(year = year, month = month))
+    }
+
+    /**
+     * Returns whether the year/month portion of [date] is directly selectable.
+     */
+    fun contains(date: LocalDate): Boolean =
+        contains(YearMonth.from(date))
+
+    /**
+     * Returns the closest selectable [YearMonth] for [yearMonth].
+     *
+     * @throws IllegalArgumentException if [yearItems] or [monthItems] are empty, contain duplicates,
+     * or contain values outside their supported ranges.
+     */
+    fun coerceYearMonth(yearMonth: YearMonth): YearMonth =
+        coerceYearMonth(year = yearMonth.year, month = yearMonth.month)
+
+    /**
+     * Returns the closest selectable [YearMonth] for [year] and [month].
+     *
+     * @throws IllegalArgumentException if [year] or [month] is outside the supported range, or if
+     * the configured item lists are invalid.
+     */
+    fun coerceYearMonth(year: Int, month: Int): YearMonth {
+        require(year in 1000..9999) {
+            "year must be in range [1000, 9999], but was $year"
+        }
+        require(month in 1..12) {
+            "month must be in range [1, 12], but was $month"
+        }
+        requireValid()
+        return selectableYearMonths().closestTo(year = year, month = month)
+    }
+
+    /**
+     * Returns the closest selectable [YearMonth] for the year/month portion of [date].
+     */
+    fun coerceDate(date: LocalDate): LocalDate =
+        coerceYearMonth(YearMonth.from(date)).atDay()
+
+    internal fun selectableYearItems(): List<Int> =
+        yearItems.filter { year ->
+            selectableMonthItemsFor(year = year).isNotEmpty()
+        }
+
+    internal fun selectableMonthItemsFor(year: Int): List<Int> =
+        monthItems.filter { month ->
+            constraints.contains(YearMonth(year = year, month = month))
+        }
+
+    private fun selectableYearMonths(): List<YearMonth> =
+        yearItems.flatMap { year ->
+            selectableMonthItemsFor(year).map { month ->
+                YearMonth(year = year, month = month)
+            }
+        }
+
+    private fun List<YearMonth>.closestTo(year: Int, month: Int): YearMonth {
+        val monthIndex = year * 12 + month
+        return closestTo(monthIndex)
+    }
+
+    private fun List<YearMonth>.closestTo(monthIndex: Int): YearMonth =
+        minWith(
+            compareBy<YearMonth> { abs(it.toMonthIndex() - monthIndex) }
+                .thenBy { it.toMonthIndex() }
+        )
+
+    private fun requireValid() {
+        yearItems.requireIntItems(name = "YearMonthPicker yearItems", range = 1000..9999)
+        monthItems.requireIntItems(name = "YearMonthPicker monthItems", range = 1..12)
+        require(selectableYearItems().isNotEmpty()) {
+            "YearMonthPicker items must contain at least one year/month allowed by constraints. " +
+                    "Adjust minYearMonth/maxYearMonth or include at least one matching " +
+                    "year/month item pair inside the allowed range."
+        }
+    }
+}
+
+private fun <T> List<T>.requireItems(name: String) {
+    require(isNotEmpty()) { "$name must not be empty." }
+    require(distinct().size == size) { "$name must not contain duplicate values." }
+}
+
+private fun List<Int>.requireIntItems(name: String, range: IntRange) {
+    requireItems(name)
+    val invalidValues = filterNot { it in range }.distinct()
+    require(invalidValues.isEmpty()) {
+        "$name must contain only values in range [${range.first}, ${range.last}]. " +
+                "Invalid values: $invalidValues"
+    }
+}
+
+private fun List<Int>.closestTo(value: Int): Int =
+    minWith(compareBy<Int> { abs(it - value) }.thenBy { it })
+
+private fun displayHourFor(hourOfDay: Int): Int {
+    val hour = hourOfDay % 12
+    return if (hour == 0) 12 else hour
+}
+
+private fun monthFor(monthNumber: Int): Month =
+    Month.entries.first { it.number == monthNumber }
+
+private fun dateFromParts(year: Int, month: Int, day: Int): LocalDate {
+    require(year in 1000..9999) {
+        "year must be in range [1000, 9999], but was $year"
+    }
+    require(month in 1..12) {
+        "month must be in range [1, 12], but was $month"
+    }
+    require(day >= 1) {
+        "day must be greater than or equal to 1, but was $day"
+    }
+    return LocalDate(
+        year = year,
+        month = month,
+        day = day.coerceAtMost(daysInMonth(year, month))
+    )
+}
+
+private fun periodFor(hourOfDay: Int): TimePeriod =
+    if (hourOfDay >= 12) TimePeriod.PM else TimePeriod.AM
+
+private fun hourOfDayFor(displayHour: Int, period: TimePeriod): Int =
+    when {
+        period == TimePeriod.AM && displayHour == 12 -> 0
+        period == TimePeriod.PM && displayHour != 12 -> displayHour + 12
+        else -> displayHour
+    }
+
+private fun displayTimeFromParts(displayHour: Int, minute: Int, period: TimePeriod): LocalTime {
+    require(displayHour in 1..12) {
+        "displayHour must be in range [1, 12], but was $displayHour"
+    }
+    require(minute in 0..59) {
+        "minute must be in range [0, 59], but was $minute"
+    }
+    return LocalTime(
+        hour = hourOfDayFor(displayHour = displayHour, period = period),
+        minute = minute
+    )
+}

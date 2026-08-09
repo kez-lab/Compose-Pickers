@@ -1,8 +1,18 @@
 # Changelog
 
-This project tracks notable user-facing and maintainer-facing changes here. The repository version is `0.7.0`; the `Unreleased` section documents changes queued for the next release.
+This project tracks notable user-facing and maintainer-facing changes here. The repository version is `0.8.0`; the `Unreleased` section documents changes queued for the next release.
 
-## Unreleased
+## 0.8.0 - Unreleased
+
+### Changed (Breaking)
+
+- Renamed every public Kotlin package from `com.kez.picker` to
+  `io.github.kezlab.compose.pickers`, including `date`, `time`, and `duration` subpackages.
+  Android library namespaces, sample and benchmark application IDs, source paths, tests, and ABI
+  reference dumps use the new namespace as well. No compatibility typealiases or deprecated old
+  packages are provided: update all imports when moving to `0.8.0`.
+
+## 0.7.0 - 2026-08-09
 
 ### Changed (Breaking)
 
@@ -10,7 +20,7 @@ This project tracks notable user-facing and maintainer-facing changes here. The 
   `kez-lab/Compose-Pickers` (old URLs redirect), the Gradle library module moved from
   `:datetimepicker` to `:pickers`, and the Maven coordinates changed from
   `io.github.kez-lab:compose-date-time-picker` to `io.github.kez-lab:compose-pickers` starting with
-  `0.7.0`. The Kotlin package `com.kez.picker` and all public API names are unchanged, so migrating
+  `0.7.0`. The Kotlin package `io.github.kezlab.compose.pickers` and all public API names are unchanged, so migrating
   only requires updating the dependency coordinates. The old artifact stays available on Maven
   Central up to `0.6.0` but will not receive further releases. This executes the brand decision
   recorded in `docs/product/wheel-picker-engine-direction.md`; the maintainer waived the remaining
@@ -273,7 +283,7 @@ This project tracks notable user-facing and maintainer-facing changes here. The 
   `onSelectedItemChange`, removing the old `PickerState<T>` and positional `startIndex` source of truth.
 - Removed `startTime` from `TimePicker` and `startLocalDate` from `DatePicker`/`YearMonthPicker`; initial values now belong to `remember*State` APIs.
 - Reworked `TimePickerState`, `DatePickerState`, and `YearMonthPickerState` so they own only logical values instead of exposing or coordinating child picker states.
-- Moved state APIs into the component packages: `TimePickerState` and `rememberTimePickerState` are now in `com.kez.picker.time`, and `YearMonthPickerState` and `rememberYearMonthPickerState` are now in `com.kez.picker.date`.
+- Moved state APIs into the component packages: `TimePickerState` and `rememberTimePickerState` are now in `io.github.kezlab.compose.pickers.time`, and `YearMonthPickerState` and `rememberYearMonthPickerState` are now in `io.github.kezlab.compose.pickers.date`.
 - Added `PickerStyle` and `PickerDefaults.style(...)` so repeated picker visual/layout configuration can be passed as one reusable object.
 - Added `PickerSemantics` plus component-specific semantics option objects so localized labels,
   item descriptions, and previous/next action labels can be passed as one reusable object.
@@ -309,8 +319,8 @@ This project tracks notable user-facing and maintainer-facing changes here. The 
   `rememberPickerState(...)` + `Picker(state = ..., startIndex = ...)` with app-owned
   `selectedItem` state, and move all date/time initial values into `remember*State`.
 - State API package moves are breaking 0.x import changes. Replace root imports such as
-  `com.kez.picker.rememberTimePickerState` and `com.kez.picker.TimePickerState` with
-  `com.kez.picker.time.*`; replace root year-month state imports with `com.kez.picker.date.*`.
+  `io.github.kezlab.compose.pickers.rememberTimePickerState` and `io.github.kezlab.compose.pickers.TimePickerState` with
+  `io.github.kezlab.compose.pickers.time.*`; replace root year-month state imports with `io.github.kezlab.compose.pickers.date.*`.
 - Picker visual parameters such as `visibleItemsCount`, `colors`, `textStyles`,
   `selectedItemBackgroundShape`, `itemPadding`, `fadingEdgeGradient`, divider configuration, and item
   alignment moved under `style = PickerDefaults.style(...)`.

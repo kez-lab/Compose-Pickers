@@ -13,7 +13,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.kez.picker.benchmark"
+    namespace = "io.github.kezlab.compose.pickers.benchmark"
     compileSdk = 36
 
     defaultConfig {

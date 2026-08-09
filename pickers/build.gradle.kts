@@ -99,7 +99,7 @@ dependencies {
 }
 
 android {
-    namespace = "com.kez.picker"
+    namespace = "io.github.kezlab.compose.pickers"
     compileSdk = 36
 
     defaultConfig {
@@ -146,6 +146,6 @@ android {
 compose {
     resources {
         publicResClass = true
-        packageOfResClass = "com.kez.picker.resources"
+        packageOfResClass = "io.github.kezlab.compose.pickers.resources"
     }
 }

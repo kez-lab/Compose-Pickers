@@ -79,7 +79,7 @@ temporal 사용자에게 주던 명확성까지 잃을 수 있다.
 - 제품명 및 저장소명: `Compose-Pickers`
 - 향후 Maven artifact 후보: `io.github.kez-lab:compose-pickers`
 - 제품 설명: `Constraint-aware wheel selection for Compose Multiplatform`
-- 기존 Kotlin package `com.kez.picker`와 public API 이름은 브랜드 결정만으로 변경하지 않는다.
+- 기존 Kotlin package `io.github.kezlab.compose.pickers`와 public API 이름은 브랜드 결정만으로 변경하지 않는다.
 
 이 이름은 소유자 접두사나 설명이 필요한 조어보다 보편적인 개발자 vocabulary를 우선한다. 그 대가로 이름
 자체의 상표 독점력과 일반 검색 구분성은 강하지 않다. README title, repository description, topics, 문서 subtitle에
@@ -108,7 +108,7 @@ Android에는 Compose를 지원하는 `dev.aige.pub:WheelPicker`와 여러 `whee
 
 > Maintainer decision: 2026-08-05에 메인테이너가 남은 gate(외부 first-use/adoption 증거)를 워이브하고
 > migration을 실행했다. 저장소는 `kez-lab/Compose-Pickers`로 rename되었고(구 URL은 GitHub redirect),
-> Maven 좌표는 `0.7.0`부터 `io.github.kez-lab:compose-pickers`를 사용한다. Kotlin package `com.kez.picker`와
+> Maven 좌표는 `0.7.0`부터 `io.github.kez-lab:compose-pickers`를 사용한다. Kotlin package `io.github.kezlab.compose.pickers`와
 > 공개 API 이름은 변경하지 않았다. rename 직전 exact-name 충돌 재검색(gate 4)은 2026-08-05에 수행했고
 > 충돌은 발견되지 않았다. 기존 `compose-date-time-picker` artifact는 `0.6.0`까지 Maven Central에 유지되며
 > 이후 릴리스는 새 좌표로만 배포한다.

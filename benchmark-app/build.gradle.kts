@@ -14,11 +14,11 @@ kotlin {
 }
 
 android {
-    namespace = "com.kez.picker.benchmark.target"
+    namespace = "io.github.kezlab.compose.pickers.benchmark.target"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.kez.picker.benchmark.target"
+        applicationId = "io.github.kezlab.compose.pickers.benchmark.target"
         minSdk = 24
         targetSdk = 36
         versionCode = 1

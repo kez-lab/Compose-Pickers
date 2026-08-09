@@ -104,7 +104,7 @@ Add the dependency to your version catalog or build file.
 
 ```toml
 [versions]
-composePickers = "0.7.0"
+composePickers = "0.8.0"
 
 [libraries]
 compose-pickers = { module = "io.github.kez-lab:compose-pickers", version.ref = "composePickers" }
@@ -114,11 +114,11 @@ compose-pickers = { module = "io.github.kez-lab:compose-pickers", version.ref = 
 
 ```kotlin
 dependencies {
-    implementation("io.github.kez-lab:compose-pickers:0.7.0")
+    implementation("io.github.kez-lab:compose-pickers:0.8.0")
 }
 ```
 
-> **Release status:** `0.7.0` is the first Maven Central release under the renamed `io.github.kez-lab:compose-pickers` coordinates. The previous `io.github.kez-lab:compose-date-time-picker:0.6.0` artifact remains available but will receive no further releases. This README is maintained from `main`, so Usage and API Reference sections can include APIs newer than the latest published artifact; use the versioned release tag when you need documentation that exactly matches a release.
+> **Release status:** The examples on `main` target the unreleased `0.8.0` API. It renames every Kotlin import from `com.kez.picker` to `io.github.kezlab.compose.pickers` and provides no compatibility layer. The latest published artifact is `io.github.kez-lab:compose-pickers:0.7.0`, which still uses the old imports. Use the `0.7.0` tag for documentation that exactly matches that release.
 
 For release notes and upgrade-impact details, see [CHANGELOG.md](CHANGELOG.md).
 
@@ -158,10 +158,10 @@ Use `TimePicker` for time selection. It supports both 12-hour and 24-hour format
 ```kotlin
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.kez.picker.time.TimePicker
-import com.kez.picker.time.rememberTimePickerState
-import com.kez.picker.util.TimeFormat
-import com.kez.picker.util.currentDateTime
+import io.github.kezlab.compose.pickers.time.TimePicker
+import io.github.kezlab.compose.pickers.time.rememberTimePickerState
+import io.github.kezlab.compose.pickers.util.TimeFormat
+import io.github.kezlab.compose.pickers.util.currentDateTime
 
 @Composable
 fun TimePicker24hExample() {
@@ -187,10 +187,10 @@ fun TimePicker24hExample() {
 ```kotlin
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.kez.picker.time.TimePicker
-import com.kez.picker.time.rememberTimePickerState
-import com.kez.picker.util.TimeFormat
-import com.kez.picker.util.currentDateTime
+import io.github.kezlab.compose.pickers.time.TimePicker
+import io.github.kezlab.compose.pickers.time.rememberTimePickerState
+import io.github.kezlab.compose.pickers.util.TimeFormat
+import io.github.kezlab.compose.pickers.util.currentDateTime
 
 @Composable
 fun TimePicker12hExample() {
@@ -218,9 +218,9 @@ coerced before the picker renders.
 ```kotlin
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.kez.picker.PickerDefaults
-import com.kez.picker.time.TimePicker
-import com.kez.picker.time.rememberTimePickerState
+import io.github.kezlab.compose.pickers.PickerDefaults
+import io.github.kezlab.compose.pickers.time.TimePicker
+import io.github.kezlab.compose.pickers.time.rememberTimePickerState
 import kotlinx.datetime.LocalTime
 
 @Composable
@@ -255,9 +255,9 @@ initial and restored values use the same scalar coercion rules. For an app-drive
 ```kotlin
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.kez.picker.PickerDefaults
-import com.kez.picker.duration.DurationPicker
-import com.kez.picker.duration.rememberDurationPickerState
+import io.github.kezlab.compose.pickers.PickerDefaults
+import io.github.kezlab.compose.pickers.duration.DurationPicker
+import io.github.kezlab.compose.pickers.duration.rememberDurationPickerState
 import kotlin.time.Duration.Companion.minutes
 
 @Composable
@@ -306,9 +306,9 @@ multi-column wheel engine API or a domain-specific quantity preset.
 
 The deliberately coarse integer grids make repair behavior easy to inspect; this is a constrained
 selection example, not a precision unit converter. See the reference implementation's
-[state and constraint contract](sample/src/commonMain/kotlin/com/kez/picker/sample/ui/screen/quantity/QuantityUnitPickerContract.kt),
-[picker composable](sample/src/commonMain/kotlin/com/kez/picker/sample/ui/screen/quantity/QuantityUnitPicker.kt),
-and [sample screen](sample/src/commonMain/kotlin/com/kez/picker/sample/ui/screen/QuantityUnitPickerSampleScreen.kt).
+[state and constraint contract](sample/src/commonMain/kotlin/io/github/kezlab/compose/pickers/sample/ui/screen/quantity/QuantityUnitPickerContract.kt),
+[picker composable](sample/src/commonMain/kotlin/io/github/kezlab/compose/pickers/sample/ui/screen/quantity/QuantityUnitPicker.kt),
+and [sample screen](sample/src/commonMain/kotlin/io/github/kezlab/compose/pickers/sample/ui/screen/QuantityUnitPickerSampleScreen.kt).
 The first two files contain the core reference; the screen uses repository-specific presentation
 components and is not a standalone copy target.
 This sample is evidence for the future engine API, not a promise that mass conversion belongs in the
@@ -329,9 +329,9 @@ artifact API. Its six exact whole-minute candidates cross midnight from `2026-02
   a later programmatic selection.
 
 See the core reference's
-[state and exact-candidate contract](sample/src/commonMain/kotlin/com/kez/picker/sample/ui/screen/datetime/DateTimePickerContract.kt),
-[picker composable](sample/src/commonMain/kotlin/com/kez/picker/sample/ui/screen/datetime/DateTimePicker.kt),
-and the repository-specific [sample screen](sample/src/commonMain/kotlin/com/kez/picker/sample/ui/screen/DateTimePickerSampleScreen.kt).
+[state and exact-candidate contract](sample/src/commonMain/kotlin/io/github/kezlab/compose/pickers/sample/ui/screen/datetime/DateTimePickerContract.kt),
+[picker composable](sample/src/commonMain/kotlin/io/github/kezlab/compose/pickers/sample/ui/screen/datetime/DateTimePicker.kt),
+and the repository-specific [sample screen](sample/src/commonMain/kotlin/io/github/kezlab/compose/pickers/sample/ui/screen/DateTimePickerSampleScreen.kt).
 The first two files are the core reference; the screen depends on repository-specific presentation
 components and is not a standalone copy target.
 This bounded stress case adds repository evidence for a future multi-column engine. It is not a
@@ -345,10 +345,10 @@ adjusts the day when the selected month changes (e.g., Feb 30 → Feb 28).
 ```kotlin
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.kez.picker.PickerDefaults
-import com.kez.picker.date.DatePicker
-import com.kez.picker.date.rememberDatePickerState
-import com.kez.picker.util.currentDate
+import io.github.kezlab.compose.pickers.PickerDefaults
+import io.github.kezlab.compose.pickers.date.DatePicker
+import io.github.kezlab.compose.pickers.date.rememberDatePickerState
+import io.github.kezlab.compose.pickers.util.currentDate
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.number
 
@@ -409,11 +409,11 @@ Use `DateRangePicker` when users need to select an ordered start and end date.
 ```kotlin
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.kez.picker.PickerDefaults
-import com.kez.picker.date.DateRange
-import com.kez.picker.date.DateRangePicker
-import com.kez.picker.date.rememberDateRangePickerState
-import com.kez.picker.util.currentDate
+import io.github.kezlab.compose.pickers.PickerDefaults
+import io.github.kezlab.compose.pickers.date.DateRange
+import io.github.kezlab.compose.pickers.date.DateRangePicker
+import io.github.kezlab.compose.pickers.date.rememberDateRangePickerState
+import io.github.kezlab.compose.pickers.util.currentDate
 import kotlinx.datetime.LocalDate
 
 @Composable
@@ -451,11 +451,11 @@ Use `YearMonthPicker` for selecting a specific month in a year.
 ```kotlin
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.kez.picker.PickerDefaults
-import com.kez.picker.date.YearMonth
-import com.kez.picker.date.YearMonthPicker
-import com.kez.picker.date.rememberYearMonthPickerState
-import com.kez.picker.util.currentDate
+import io.github.kezlab.compose.pickers.PickerDefaults
+import io.github.kezlab.compose.pickers.date.YearMonth
+import io.github.kezlab.compose.pickers.date.YearMonthPicker
+import io.github.kezlab.compose.pickers.date.rememberYearMonthPickerState
+import io.github.kezlab.compose.pickers.util.currentDate
 
 @Composable
 fun YearMonthPickerExample() {
@@ -515,8 +515,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.kez.picker.time.rememberTimePickerState
-import com.kez.picker.time.TimePicker
+import io.github.kezlab.compose.pickers.time.rememberTimePickerState
+import io.github.kezlab.compose.pickers.time.TimePicker
 import kotlinx.datetime.LocalTime
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -588,10 +588,10 @@ The example stores hour and minute separately because primitive values work with
 > This reference describes the current `main` branch API. Check [CHANGELOG.md](CHANGELOG.md) before copying API examples into a project that depends on the public `0.6.0` artifact.
 
 Public state APIs live beside their components: `TimePicker`, `TimePickerState`, and
-`rememberTimePickerState` are in `com.kez.picker.time`; `DurationPicker`, `DurationPickerState`, and
-`rememberDurationPickerState` are in `com.kez.picker.duration`; `DatePicker`, `DatePickerState`,
+`rememberTimePickerState` are in `io.github.kezlab.compose.pickers.time`; `DurationPicker`, `DurationPickerState`, and
+`rememberDurationPickerState` are in `io.github.kezlab.compose.pickers.duration`; `DatePicker`, `DatePickerState`,
 `YearMonthPicker`, `YearMonthPickerState`, and their `remember*State` functions are in
-`com.kez.picker.date`.
+`io.github.kezlab.compose.pickers.date`.
 
 Format options customize visible item text and optional accessibility value descriptions. If an
 item-specific content description is omitted, the picker uses the visible item text as the default
@@ -635,8 +635,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import com.kez.picker.PickerDefaults
-import com.kez.picker.WheelPicker
+import io.github.kezlab.compose.pickers.PickerDefaults
+import io.github.kezlab.compose.pickers.WheelPicker
 
 @Composable
 fun SizePickerExample() {
@@ -801,8 +801,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import com.kez.picker.time.rememberTimePickerState
-import com.kez.picker.time.TimePicker
+import io.github.kezlab.compose.pickers.time.rememberTimePickerState
+import io.github.kezlab.compose.pickers.time.TimePicker
 import kotlinx.datetime.LocalTime
 
 @Composable

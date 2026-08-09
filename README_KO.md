@@ -103,7 +103,7 @@ callback을 발생시키지 않습니다. 접근성 semantics(column label, 현�
 
 ```toml
 [versions]
-composePickers = "0.7.0"
+composePickers = "0.8.0"
 
 [libraries]
 compose-pickers = { module = "io.github.kez-lab:compose-pickers", version.ref = "composePickers" }
@@ -113,11 +113,11 @@ compose-pickers = { module = "io.github.kez-lab:compose-pickers", version.ref = 
 
 ```kotlin
 dependencies {
-    implementation("io.github.kez-lab:compose-pickers:0.7.0")
+    implementation("io.github.kez-lab:compose-pickers:0.8.0")
 }
 ```
 
-> **릴리스 상태:** `0.7.0`은 이름이 변경된 `io.github.kez-lab:compose-pickers` 좌표의 첫 Maven Central 릴리스입니다. 이전 `io.github.kez-lab:compose-date-time-picker:0.6.0` artifact는 계속 사용할 수 있지만 이후 릴리스는 제공하지 않습니다. 이 README는 `main` 기준으로 유지되므로, 사용법과 API 레퍼런스에는 최신 배포 artifact보다 새로운 API가 포함될 수 있습니다. 릴리스와 정확히 일치하는 문서가 필요하면 해당 버전 tag를 사용하세요.
+> **릴리스 상태:** `main`의 예제는 아직 배포되지 않은 `0.8.0` API를 기준으로 합니다. 모든 Kotlin import가 `com.kez.picker`에서 `io.github.kezlab.compose.pickers`로 바뀌며 호환 계층은 제공하지 않습니다. 현재 배포된 최신 artifact는 이전 import를 사용하는 `io.github.kez-lab:compose-pickers:0.7.0`입니다. 해당 릴리스와 정확히 일치하는 문서가 필요하면 `0.7.0` tag를 사용하세요.
 
 릴리스 노트와 업그레이드 영향은 영문 [CHANGELOG.md](CHANGELOG.md)를 참고하세요.
 
@@ -155,10 +155,10 @@ truth는 이 state 객체입니다.
 ```kotlin
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.kez.picker.time.TimePicker
-import com.kez.picker.time.rememberTimePickerState
-import com.kez.picker.util.TimeFormat
-import com.kez.picker.util.currentDateTime
+import io.github.kezlab.compose.pickers.time.TimePicker
+import io.github.kezlab.compose.pickers.time.rememberTimePickerState
+import io.github.kezlab.compose.pickers.util.TimeFormat
+import io.github.kezlab.compose.pickers.util.currentDateTime
 
 @Composable
 fun TimePicker24hExample() {
@@ -184,10 +184,10 @@ fun TimePicker24hExample() {
 ```kotlin
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.kez.picker.time.TimePicker
-import com.kez.picker.time.rememberTimePickerState
-import com.kez.picker.util.TimeFormat
-import com.kez.picker.util.currentDateTime
+import io.github.kezlab.compose.pickers.time.TimePicker
+import io.github.kezlab.compose.pickers.time.rememberTimePickerState
+import io.github.kezlab.compose.pickers.util.TimeFormat
+import io.github.kezlab.compose.pickers.util.currentDateTime
 
 @Composable
 fun TimePicker12hExample() {
@@ -215,9 +215,9 @@ fun TimePicker12hExample() {
 ```kotlin
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.kez.picker.PickerDefaults
-import com.kez.picker.time.TimePicker
-import com.kez.picker.time.rememberTimePickerState
+import io.github.kezlab.compose.pickers.PickerDefaults
+import io.github.kezlab.compose.pickers.time.TimePicker
+import io.github.kezlab.compose.pickers.time.rememberTimePickerState
 import kotlinx.datetime.LocalTime
 
 @Composable
@@ -250,9 +250,9 @@ fun BusinessHoursTimePickerExample() {
 ```kotlin
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.kez.picker.PickerDefaults
-import com.kez.picker.duration.DurationPicker
-import com.kez.picker.duration.rememberDurationPickerState
+import io.github.kezlab.compose.pickers.PickerDefaults
+import io.github.kezlab.compose.pickers.duration.DurationPicker
+import io.github.kezlab.compose.pickers.duration.rememberDurationPickerState
 import kotlin.time.Duration.Companion.minutes
 
 @Composable
@@ -301,9 +301,9 @@ preset을 공개하기 전에 core source-repair와 state-first callback 경로�
 
 의도적으로 거친 정수 grid를 사용해 selection repair를 쉽게 관찰할 수 있게 한 constrained selection
 예제이며, 정밀 단위 변환기가 아닙니다. reference implementation의
-[state와 constraint 계약](sample/src/commonMain/kotlin/com/kez/picker/sample/ui/screen/quantity/QuantityUnitPickerContract.kt),
-[picker composable](sample/src/commonMain/kotlin/com/kez/picker/sample/ui/screen/quantity/QuantityUnitPicker.kt),
-[sample screen](sample/src/commonMain/kotlin/com/kez/picker/sample/ui/screen/QuantityUnitPickerSampleScreen.kt)을
+[state와 constraint 계약](sample/src/commonMain/kotlin/io/github/kezlab/compose/pickers/sample/ui/screen/quantity/QuantityUnitPickerContract.kt),
+[picker composable](sample/src/commonMain/kotlin/io/github/kezlab/compose/pickers/sample/ui/screen/quantity/QuantityUnitPicker.kt),
+[sample screen](sample/src/commonMain/kotlin/io/github/kezlab/compose/pickers/sample/ui/screen/QuantityUnitPickerSampleScreen.kt)을
 함께 참고하세요. 앞의 두 파일이 core reference이며 screen은 저장소 전용 presentation component에 의존하므로
 단독 copy target이 아닙니다. 이 sample은 미래 engine API를 결정하기 위한 증거이며 mass conversion을 core picker library에
 포함하겠다는 약속이 아닙니다.
@@ -322,9 +322,9 @@ exact whole-minute candidate는 `2026-02-28 23:00`부터 `2026-03-01 01:30`까�
   selection을 덮어쓰지 못함을 검증합니다.
 
 core reference의
-[state와 exact-candidate 계약](sample/src/commonMain/kotlin/com/kez/picker/sample/ui/screen/datetime/DateTimePickerContract.kt),
-[picker composable](sample/src/commonMain/kotlin/com/kez/picker/sample/ui/screen/datetime/DateTimePicker.kt),
-저장소 전용 [sample screen](sample/src/commonMain/kotlin/com/kez/picker/sample/ui/screen/DateTimePickerSampleScreen.kt)을
+[state와 exact-candidate 계약](sample/src/commonMain/kotlin/io/github/kezlab/compose/pickers/sample/ui/screen/datetime/DateTimePickerContract.kt),
+[picker composable](sample/src/commonMain/kotlin/io/github/kezlab/compose/pickers/sample/ui/screen/datetime/DateTimePicker.kt),
+저장소 전용 [sample screen](sample/src/commonMain/kotlin/io/github/kezlab/compose/pickers/sample/ui/screen/DateTimePickerSampleScreen.kt)을
 함께 참고하세요. 앞의 두 파일이 core reference이며 screen은 저장소 전용 presentation component에 의존하므로
 standalone copy target이 아닙니다. 이 bounded stress case는 미래 multi-column engine을 위한 repository evidence일 뿐 production
 date-time API, timezone model, first-use 결과 또는 market-demand proof가 아닙니다.
@@ -336,10 +336,10 @@ date-time API, timezone model, first-use 결과 또는 market-demand proof가 �
 ```kotlin
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.kez.picker.PickerDefaults
-import com.kez.picker.date.DatePicker
-import com.kez.picker.date.rememberDatePickerState
-import com.kez.picker.util.currentDate
+import io.github.kezlab.compose.pickers.PickerDefaults
+import io.github.kezlab.compose.pickers.date.DatePicker
+import io.github.kezlab.compose.pickers.date.rememberDatePickerState
+import io.github.kezlab.compose.pickers.util.currentDate
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.number
 
@@ -399,11 +399,11 @@ fun DatePickerExample() {
 ```kotlin
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.kez.picker.PickerDefaults
-import com.kez.picker.date.DateRange
-import com.kez.picker.date.DateRangePicker
-import com.kez.picker.date.rememberDateRangePickerState
-import com.kez.picker.util.currentDate
+import io.github.kezlab.compose.pickers.PickerDefaults
+import io.github.kezlab.compose.pickers.date.DateRange
+import io.github.kezlab.compose.pickers.date.DateRangePicker
+import io.github.kezlab.compose.pickers.date.rememberDateRangePickerState
+import io.github.kezlab.compose.pickers.util.currentDate
 import kotlinx.datetime.LocalDate
 
 @Composable
@@ -441,11 +441,11 @@ fun DateRangePickerExample() {
 ```kotlin
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.kez.picker.PickerDefaults
-import com.kez.picker.date.YearMonth
-import com.kez.picker.date.YearMonthPicker
-import com.kez.picker.date.rememberYearMonthPickerState
-import com.kez.picker.util.currentDate
+import io.github.kezlab.compose.pickers.PickerDefaults
+import io.github.kezlab.compose.pickers.date.YearMonth
+import io.github.kezlab.compose.pickers.date.YearMonthPicker
+import io.github.kezlab.compose.pickers.date.rememberYearMonthPickerState
+import io.github.kezlab.compose.pickers.util.currentDate
 
 @Composable
 fun YearMonthPickerExample() {
@@ -505,8 +505,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.kez.picker.time.rememberTimePickerState
-import com.kez.picker.time.TimePicker
+import io.github.kezlab.compose.pickers.time.rememberTimePickerState
+import io.github.kezlab.compose.pickers.time.TimePicker
 import kotlinx.datetime.LocalTime
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -578,10 +578,10 @@ fun BottomSheetPickerExample() {
 > 이 레퍼런스는 현재 `main` 브랜치 API를 설명합니다. 공개 `0.6.0` artifact에 의존하는 프로젝트에 예제를 복사하기 전에는 [CHANGELOG.md](CHANGELOG.md)를 확인하세요.
 
 공개 state API는 해당 컴포넌트 패키지에 함께 둡니다. `TimePicker`, `TimePickerState`,
-`rememberTimePickerState`는 `com.kez.picker.time`에 있고, `DurationPicker`, `DurationPickerState`,
-`rememberDurationPickerState`는 `com.kez.picker.duration`에 있습니다. `DatePicker`, `DatePickerState`,
+`rememberTimePickerState`는 `io.github.kezlab.compose.pickers.time`에 있고, `DurationPicker`, `DurationPickerState`,
+`rememberDurationPickerState`는 `io.github.kezlab.compose.pickers.duration`에 있습니다. `DatePicker`, `DatePickerState`,
 `YearMonthPicker`, `YearMonthPickerState` 및 관련 `remember*State` 함수는
-`com.kez.picker.date`에 있습니다.
+`io.github.kezlab.compose.pickers.date`에 있습니다.
 
 format 옵션은 화면에 보이는 item text와 선택적인 접근성 값 설명을 한 곳에서 정의합니다.
 item별 content description을 생략하면 picker는 화면에 보이는 텍스트를 접근성 값의 기본값으로
@@ -624,8 +624,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import com.kez.picker.PickerDefaults
-import com.kez.picker.WheelPicker
+import io.github.kezlab.compose.pickers.PickerDefaults
+import io.github.kezlab.compose.pickers.WheelPicker
 
 @Composable
 fun SizePickerExample() {
@@ -785,8 +785,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import com.kez.picker.time.rememberTimePickerState
-import com.kez.picker.time.TimePicker
+import io.github.kezlab.compose.pickers.time.rememberTimePickerState
+import io.github.kezlab.compose.pickers.time.TimePicker
 import kotlinx.datetime.LocalTime
 
 @Composable
