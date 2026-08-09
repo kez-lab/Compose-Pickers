@@ -117,7 +117,7 @@ dependencies {
 }
 ```
 
-> **릴리스 상태:** `0.7.0`은 이름이 변경된 `io.github.kez-lab:compose-pickers` 좌표로 준비된 첫 릴리스이며 Maven Central 공개를 기다리고 있습니다. 공개되기 전까지는 이전 `io.github.kez-lab:compose-date-time-picker:0.6.0` artifact를 사용하세요. 이 README는 `main` 기준으로 유지되므로, 사용법과 API 레퍼런스에는 최신 배포 artifact보다 새로운 API가 포함될 수 있습니다. 릴리스와 정확히 일치하는 문서가 필요하면 해당 버전 tag를 사용하세요.
+> **릴리스 상태:** `0.7.0`은 이름이 변경된 `io.github.kez-lab:compose-pickers` 좌표의 첫 Maven Central 릴리스입니다. 이전 `io.github.kez-lab:compose-date-time-picker:0.6.0` artifact는 계속 사용할 수 있지만 이후 릴리스는 제공하지 않습니다. 이 README는 `main` 기준으로 유지되므로, 사용법과 API 레퍼런스에는 최신 배포 artifact보다 새로운 API가 포함될 수 있습니다. 릴리스와 정확히 일치하는 문서가 필요하면 해당 버전 tag를 사용하세요.
 
 릴리스 노트와 업그레이드 영향은 영문 [CHANGELOG.md](CHANGELOG.md)를 참고하세요.
 
