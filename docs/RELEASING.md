@@ -31,12 +31,16 @@
 
 GitHub Actions의 **Publish Release** 워크플로를 수동 실행하고 `release_tag`에 정확히
 `0.7.0`을 입력한다. 워크플로는 다음을 모두 확인한 뒤 태그가 가리키는 소스만
-`publishToMavenCentral`로 배포한다.
+`publishAndReleaseToMavenCentral`로 배포·공개한다. 이 task는 Central Portal deployment가
+검증된 뒤 공개될 때까지 기다리므로, Portal에서 별도로 **Publish**를 누를 필요가 없다.
 
 - tag가 annotated tag인지
 - tag commit이 `origin/main`에서 도달 가능한지
 - tag 이름이 `VERSION_NAME`과 정확히 일치하는지
 - 버전이 `-SNAPSHOT`이 아닌지
+
+GitHub Actions 성공만으로 끝내지 말고, 아래 배포 후 확인에서 공개 Maven repository의
+artifact까지 확인한다.
 
 GitHub Actions UI에서 워크플로 정의를 실행할 branch는 현재 `main`을 선택한다. 실제
 배포 대상 소스는 `release_tag`로 명시된 tag이므로 branch 선택에 따라 artifact가 바뀌지
