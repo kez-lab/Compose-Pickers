@@ -102,11 +102,11 @@ dependencies {
 }
 
 android {
-    namespace = "com.kez.picker.sample"
+    namespace = "io.github.kezlab.compose.pickers.sample"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.kez.picker.sample"
+        applicationId = "io.github.kezlab.compose.pickers.sample"
         minSdk = 24
         targetSdk = 36
         versionCode = 1

@@ -51,7 +51,7 @@
 
 ```bash
 ./gradlew :benchmark:connectedBenchmarkAndroidTest \
-  -Pandroid.testInstrumentationRunnerArguments.class=com.kez.picker.benchmark.PickerStartupBenchmark#generic10000Items \
+  -Pandroid.testInstrumentationRunnerArguments.class=io.github.kezlab.compose.pickers.benchmark.PickerStartupBenchmark#generic10000Items \
   --no-daemon
 ```
 

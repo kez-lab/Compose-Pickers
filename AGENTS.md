@@ -10,7 +10,7 @@ This file provides guidance to Codex (Codex.ai/code) when working with code in t
 
 Compose-Pickers (formerly Compose-DateTimePicker) is a Kotlin Multiplatform library providing constraint-aware wheel selection for Compose: a generic `WheelPicker<T>` plus date, time, and duration presets. It targets Android, iOS, Desktop (JVM), and Web with a shared codebase. The target Maven coordinates are `io.github.kez-lab:compose-pickers` (first release pending); the latest published artifact is still `io.github.kez-lab:compose-date-time-picker:0.6.0`.
 
-**Repository VERSION_NAME**: 0.7.0
+**Repository VERSION_NAME**: 0.8.0
 **License**: Apache 2.0
 
 ## Architecture
@@ -97,7 +97,7 @@ Most logic lives in `commonMain`. Platform-specific code is minimal.
 - When the same invariant appears in multiple components, extract the common rule or deliberately audit every counterpart. Keep `contains`, `coerce*`, validation, rendered item filtering, and selection repair behavior aligned across TimePicker, DatePicker, YearMonthPicker, and DateRangePicker.
 - Before handing off a PR for review, red-team the implementation against the assumptions used to build it: look for unmeasured optimization, duplicated local patterns, missing fast paths, missing tests around non-standard logic, and inconsistent failure contracts.
 - During 0.x API stabilization, prefer the best long-term API shape over source compatibility when the maintainer explicitly authorizes breaking changes. Document every breaking change in README/CHANGELOG and update ABI dumps.
-- Keep public state APIs colocated with their component package unless there is a strong API-design reason not to. For example, `TimePickerState` and `rememberTimePickerState` live in `com.kez.picker.time`; date and year-month state APIs live in `com.kez.picker.date`.
+- Keep public state APIs colocated with their component package unless there is a strong API-design reason not to. For example, `TimePickerState` and `rememberTimePickerState` live in `io.github.kezlab.compose.pickers.time`; date and year-month state APIs live in `io.github.kezlab.compose.pickers.date`.
 - Prefer controlled picker APIs with a single source of truth. Avoid APIs where both a state object and positional parameter can initialize or mutate the same selection.
 - For composite pickers, expose a state object for saveable logical selection plus an optional `onSelected*Change` callback for user-driven changes. Document that programmatic `state.select*` calls require the caller to update app-owned state in the same event handler.
 - For year/month-only values, prefer `date.YearMonth` over encoding the selection as the first day of a `LocalDate`; keep `selectedMonthDate` only as an interop convenience.
@@ -183,7 +183,7 @@ git diff --check origin/main...HEAD
 
 **Run a single test**: Use `--tests` filter:
 ```bash
-./gradlew :pickers:testDebugUnitTest --tests "com.kez.picker.TimePickerStateTest.timePickerState_24HourFormat_initialValues_areCorrect" --no-daemon
+./gradlew :pickers:testDebugUnitTest --tests "io.github.kezlab.compose.pickers.TimePickerStateTest.timePickerState_24HourFormat_initialValues_areCorrect" --no-daemon
 ```
 
 ### Sample App
@@ -194,7 +194,7 @@ git diff --check origin/main...HEAD
 
 # Install sample on Android
 ./gradlew :sample:installDebug
-adb shell am start -n com.kez.picker.sample/.MainActivity
+adb shell am start -n io.github.kezlab.compose.pickers.sample/.MainActivity
 
 # iOS: open iosApp/iosApp.xcodeproj in Xcode
 ```
@@ -272,7 +272,7 @@ color = lerp(selectedTextStyle.color, textStyle.color, fraction)
 
 Version is set in `gradle.properties`:
 ```properties
-VERSION_NAME=0.6.0
+VERSION_NAME=0.8.0
 ```
 
 Follow **Semantic Versioning**: MAJOR.MINOR.PATCH
