@@ -118,7 +118,7 @@ dependencies {
 }
 ```
 
-> **Release status:** `0.7.0` is the first Maven Central release under the renamed `io.github.kez-lab:compose-pickers` coordinates. The previous `io.github.kez-lab:compose-date-time-picker:0.6.0` artifact remains available but will receive no further releases. This README is maintained from `main`, so Usage and API Reference sections can include APIs newer than the latest published artifact; use the versioned release tag when you need documentation that exactly matches a release.
+> **Release status:** `0.7.0` is the first release prepared under the renamed `io.github.kez-lab:compose-pickers` coordinates and is awaiting Maven Central publication. Until it is publicly available, use the previous `io.github.kez-lab:compose-date-time-picker:0.6.0` artifact. This README is maintained from `main`, so Usage and API Reference sections can include APIs newer than the latest published artifact; use the versioned release tag when you need documentation that exactly matches a release.
 
 For release notes and upgrade-impact details, see [CHANGELOG.md](CHANGELOG.md).
 
