@@ -1,6 +1,6 @@
 # Compose Pickers
 
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.kez-lab/compose-date-time-picker?label=maven%20central)](https://central.sonatype.com/artifact/io.github.kez-lab/compose-date-time-picker)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.kez-lab/compose-pickers?label=maven%20central)](https://central.sonatype.com/artifact/io.github.kez-lab/compose-pickers)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](./LICENSE)
 [![Platforms](https://img.shields.io/badge/platforms-Android%20%7C%20iOS%20%7C%20Desktop%20%7C%20Web-4F46E5)](#)
 [![Live demo](https://img.shields.io/badge/live%20demo-try%20it%20in%20your%20browser-4F46E5)](https://kez-lab.org/Compose-Pickers/)
@@ -118,13 +118,13 @@ dependencies {
 }
 ```
 
-> **Release status:** The library was renamed in `0.7.0`. The `io.github.kez-lab:compose-pickers` coordinates above are **not published to Maven Central yet**; the latest published artifact is `io.github.kez-lab:compose-date-time-picker:0.6.0` under the previous project name (GitHub Releases may still show `0.4.0` as the latest tagged release). Until the first `compose-pickers` release ships, either depend on the old `0.6.0` artifact or test `main` locally: run `./gradlew :pickers:publishToMavenLocal`, add `mavenLocal()` to your consuming build, and depend on the repository `VERSION_NAME`. This README is maintained from `main`, so Usage and API Reference sections can include APIs that are not in any published artifact yet.
+> **Release status:** `0.7.0` is the first Maven Central release under the renamed `io.github.kez-lab:compose-pickers` coordinates. The previous `io.github.kez-lab:compose-date-time-picker:0.6.0` artifact remains available but will receive no further releases. This README is maintained from `main`, so Usage and API Reference sections can include APIs newer than the latest published artifact; use the versioned release tag when you need documentation that exactly matches a release.
 
 For release notes and upgrade-impact details, see [CHANGELOG.md](CHANGELOG.md).
 
 ## Usage
 
-> The examples below target the current `main` branch API, which is not published yet. See the release-status note under [Installation](#installation).
+> The examples below target the current `main` branch API and can be newer than the latest published release. See the release-status note under [Installation](#installation).
 
 ### State and Callback Pattern
 
