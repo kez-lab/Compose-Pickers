@@ -1,6 +1,6 @@
 # Compose Pickers
 
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.kez-lab/compose-date-time-picker?label=maven%20central)](https://central.sonatype.com/artifact/io.github.kez-lab/compose-date-time-picker)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.kez-lab/compose-pickers?label=maven%20central)](https://central.sonatype.com/artifact/io.github.kez-lab/compose-pickers)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](./LICENSE)
 [![Platforms](https://img.shields.io/badge/platforms-Android%20%7C%20iOS%20%7C%20Desktop%20%7C%20Web-4F46E5)](#)
 [![Live demo](https://img.shields.io/badge/live%20demo-%EB%B8%8C%EB%9D%BC%EC%9A%B0%EC%A0%80%EC%97%90%EC%84%9C%20%EC%B2%B4%ED%97%98-4F46E5)](https://kez-lab.org/Compose-Pickers/)
@@ -117,13 +117,13 @@ dependencies {
 }
 ```
 
-> **릴리스 상태:** 라이브러리는 `0.7.0`에서 `Compose-Pickers`로 이름이 변경되었습니다. 위의 `io.github.kez-lab:compose-pickers` 좌표는 **아직 Maven Central에 배포되지 않았습니다**. 현재 배포된 최신 artifact는 이전 이름의 `io.github.kez-lab:compose-date-time-picker:0.6.0`입니다(GitHub Releases 화면은 아직 `0.4.0`을 최신 태그로 표시할 수 있습니다). 첫 `compose-pickers` 릴리스 전까지는 기존 `0.6.0` artifact를 사용하거나, `./gradlew :pickers:publishToMavenLocal` 실행 후 소비 프로젝트에 `mavenLocal()`을 추가하고 저장소 `VERSION_NAME`에 의존해 `main`을 로컬에서 테스트하세요. 이 README는 `main` 기준으로 유지되므로, 사용법과 API 레퍼런스에는 아직 배포되지 않은 API가 포함될 수 있습니다.
+> **릴리스 상태:** `0.7.0`은 이름이 변경된 `io.github.kez-lab:compose-pickers` 좌표의 첫 Maven Central 릴리스입니다. 이전 `io.github.kez-lab:compose-date-time-picker:0.6.0` artifact는 계속 사용할 수 있지만 이후 릴리스는 제공하지 않습니다. 이 README는 `main` 기준으로 유지되므로, 사용법과 API 레퍼런스에는 최신 배포 artifact보다 새로운 API가 포함될 수 있습니다. 릴리스와 정확히 일치하는 문서가 필요하면 해당 버전 tag를 사용하세요.
 
 릴리스 노트와 업그레이드 영향은 영문 [CHANGELOG.md](CHANGELOG.md)를 참고하세요.
 
 ## 사용법
 
-> 아래 예제는 아직 배포되지 않은 현재 `main` 브랜치 API를 기준으로 합니다. [설치 방법](#설치-방법)의 릴리스 상태 안내를 참고하세요.
+> 아래 예제는 현재 `main` 브랜치 API를 기준으로 하며 최신 배포본보다 새로울 수 있습니다. [설치 방법](#설치-방법)의 릴리스 상태 안내를 참고하세요.
 
 ### State와 Callback 사용 패턴
 
