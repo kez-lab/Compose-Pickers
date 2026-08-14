@@ -661,8 +661,8 @@ public final class io/github/kezlab/compose/pickers/YearMonthPickerSemantics {
 public final class io/github/kezlab/compose/pickers/date/ComposableSingletons$DateRangePickerKt {
 	public static final field INSTANCE Lio/github/kezlab/compose/pickers/date/ComposableSingletons$DateRangePickerKt;
 	public fun <init> ()V
-	public final fun getLambda$1188260528$pickers ()Lkotlin/jvm/functions/Function2;
-	public final fun getLambda$236081161$pickers ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$1188260528$Compose_Pickers_pickers ()Lkotlin/jvm/functions/Function2;
+	public final fun getLambda$236081161$Compose_Pickers_pickers ()Lkotlin/jvm/functions/Function2;
 }
 
 public final class io/github/kezlab/compose/pickers/date/DatePickerKt {

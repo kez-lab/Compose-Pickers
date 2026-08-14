@@ -63,14 +63,14 @@ jobs:
       - name: Install Android build tools
         run: |
           sdkmanager "platform-tools" \
-                     "platforms;android-36" \
-                     "build-tools;36.0.0"
+                     "platforms;android-37" \
+                     "build-tools;37.0.0"
           yes | sdkmanager --licenses
 
       - name: Gradle Check • Kotlin ABI
         run: |
           ./gradlew \
-            ${{ env.LIBRARY_MODULE }}:checkLegacyAbi \
+            ${{ env.LIBRARY_MODULE }}:checkKotlinAbi \
             --no-daemon
 
   linux-builds:
@@ -105,8 +105,8 @@ jobs:
           sdkmanager "platform-tools" \
                      "emulator" \
                      "platforms;android-35" \
-                     "platforms;android-36" \
-                     "build-tools;36.0.0" \
+                     "platforms;android-37" \
+                     "build-tools;37.0.0" \
                      "system-images;android-35;aosp_atd;x86_64"
           yes | sdkmanager --licenses
 
@@ -124,7 +124,7 @@ jobs:
           ./gradlew \
             ${{ env.LIBRARY_MODULE }}:clean \
             ${{ env.LIBRARY_MODULE }}:assembleRelease \
-            ${{ env.LIBRARY_MODULE }}:testReleaseUnitTest \
+            ${{ env.LIBRARY_MODULE }}:testDebugUnitTest \
             ${{ env.SAMPLE_MODULE }}:assembleDebug \
             --no-daemon
 

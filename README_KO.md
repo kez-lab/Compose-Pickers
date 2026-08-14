@@ -67,7 +67,9 @@ callback을 발생시키지 않습니다. 접근성 semantics(column label, 현�
 
 공통 특성:
 
-- **멀티플랫폼**: 하나의 코드베이스로 Android, iOS, Desktop (JVM), Web (Wasm)을 지원합니다.
+- **멀티플랫폼**: 하나의 코드베이스로 Android, iOS, Desktop (JVM), Web (Wasm)을 지원합니다. 배포되는
+  iOS 타깃은 `iosArm64`(실기기)와 `iosSimulatorArm64`(Apple Silicon 시뮬레이터)입니다. `iosX64`
+  (인텔 Mac 시뮬레이터)는 Compose Multiplatform 1.11을 따라 `0.8.0`부터 배포하지 않습니다.
 - **커스터마이징**: 파라미터 목록을 계속 늘리는 대신 `PickerStyle`, format, layout, semantics 옵션 객체를
   사용합니다.
 - **제약 보정**: 복원된 값이나 preset을 picker와 동일한 규칙으로 정규화할 수 있도록 public `contains` /

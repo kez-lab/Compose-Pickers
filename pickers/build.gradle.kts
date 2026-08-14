@@ -12,9 +12,10 @@ plugins {
 }
 
 kotlin {
+    // Kotlin 2.4: calling abiValidation { } enables validation; the former
+    // `enabled` property was removed.
     @OptIn(ExperimentalAbiValidation::class)
     abiValidation {
-        enabled.set(true)
     }
 
     jvmToolchain(17)
@@ -26,7 +27,7 @@ kotlin {
         }
     }
 
-    iosX64()
+    // Compose Multiplatform 1.11 no longer publishes iosX64 (Intel Mac simulator), so exclude it.
     iosArm64()
     iosSimulatorArm64()
 
@@ -100,7 +101,7 @@ dependencies {
 
 android {
     namespace = "io.github.kezlab.compose.pickers"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         minSdk = 24
@@ -142,7 +143,7 @@ android {
     buildFeatures { compose = true }
 }
 
-// (선택) JetBrains Compose 리소스 생성 옵션
+// Optional JetBrains Compose resource generation settings.
 compose {
     resources {
         publicResClass = true
