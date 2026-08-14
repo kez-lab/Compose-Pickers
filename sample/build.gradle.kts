@@ -18,12 +18,8 @@ kotlin {
         }
     }
 
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
-
+    // Compose Multiplatform 1.11 no longer publishes iosX64 (Intel Mac simulator), so exclude it.
     listOf(
-        iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach {
@@ -103,7 +99,7 @@ dependencies {
 
 android {
     namespace = "io.github.kezlab.compose.pickers.sample"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "io.github.kezlab.compose.pickers.sample"

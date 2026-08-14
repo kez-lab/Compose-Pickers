@@ -67,7 +67,9 @@ actions, disabled state) are built in and localizable.
 
 Shared across all of them:
 
-- **Multiplatform**: Android, iOS, Desktop (JVM), and Web (Wasm) from one codebase.
+- **Multiplatform**: Android, iOS, Desktop (JVM), and Web (Wasm) from one codebase. Published iOS
+  targets are `iosArm64` (device) and `iosSimulatorArm64` (Apple Silicon simulator); `iosX64`
+  (Intel Mac simulator) is no longer published as of `0.8.0`, following Compose Multiplatform 1.11.
 - **Customizable**: `PickerStyle`, format, layout, and semantics option objects instead of an
   ever-growing parameter list.
 - **Constraint repair**: public `contains` / `coerce*` helpers so restored values and presets can be

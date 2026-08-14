@@ -14,7 +14,7 @@ kotlin {
 
 android {
     namespace = "io.github.kezlab.compose.pickers.benchmark"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         minSdk = 28

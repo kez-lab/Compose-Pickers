@@ -15,7 +15,7 @@ kotlin {
 
 android {
     namespace = "io.github.kezlab.compose.pickers.benchmark.target"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "io.github.kezlab.compose.pickers.benchmark.target"

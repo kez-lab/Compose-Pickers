@@ -119,7 +119,8 @@ Most logic lives in `commonMain`. Platform-specific code is minimal.
 - When adding public state mutation APIs, keep logical state and picker scroll position synchronized, and require apps to keep custom item lists consistent with requested values.
 - During programmatic selection sync, do not let intermediate `LazyListState` scroll positions overwrite the requested state value before the picker settles.
 - When higher-level components pass semantics labels to `Picker`, expose them through component-specific semantics option objects with sensible defaults so Android apps can localize TalkBack output. Update KDoc and both READMEs in the same PR.
-- Kotlin 2.2.21 ABI validation uses `checkLegacyAbi`/`updateLegacyAbi` in this repo. Re-check task names and dump format after Kotlin upgrades.
+- Kotlin 2.4.10 ABI validation uses `checkKotlinAbi`/`updateKotlinAbi` in this repo. The former `checkLegacyAbi`/`updateLegacyAbi` names still resolve but are deprecated aliases. Also note the DSL change: `abiValidation { }` now enables validation on its own and the `enabled` property was removed. Re-check task names and dump format after Kotlin upgrades.
+- The build runs AGP 9 in compatibility mode: `android.builtInKotlin=false` and `android.newDsl=false` in `gradle.properties`. Both are required because AGP 9 forbids `org.jetbrains.kotlin.multiplatform` together with `com.android.library`/`com.android.application`, which is how `:pickers` and `:sample` are structured, and `org.jetbrains.kotlin.android` (used by `:benchmark`/`:benchmark-app`) is incompatible with the new DSL. AGP 10 removes both flags, so revisit when KMP supports the AGP 9 DSL — `:pickers` would move to `com.android.kotlin.multiplatform.library` and the Android app part of `:sample` would need its own non-KMP subproject.
 - Treat `pickers/api/` as committed release-gate data. Public API changes must include reviewed ABI dump updates, and reviewers should separate intended picker/state API changes from preview/generated resource churn.
 - Keep `@Preview` composables private tooling code so sample previews do not become part of the supported public API surface. Reject ABI dump changes that add `*Preview` symbols back to `pickers/api/`. If accidental preview symbols are removed from ABI dumps, call out the compatibility impact in the PR and release notes.
 - Distinguish the latest public Maven Central/GitHub Release version from the repository `VERSION_NAME`. Before changing README install snippets, verify the public release and do not point copy-paste dependency examples at unpublished versions unless the docs explicitly mark them as unreleased/local-publish usage.
@@ -148,9 +149,9 @@ Most logic lives in `commonMain`. Platform-specific code is minimal.
 # Run all tests
 ./gradlew :pickers:test --no-daemon
 
-# Run library Android component UI tests on Robolectric
+# Run library Android component UI tests on Robolectric.
+# AGP 9 no longer registers a release unit test variant, so debug is the only one.
 ./gradlew :pickers:testDebugUnitTest --no-daemon
-./gradlew :pickers:testReleaseUnitTest --no-daemon
 
 # Compile sample Android instrumented tests
 ./gradlew :sample:assembleDebugAndroidTest --no-daemon
@@ -171,10 +172,10 @@ git diff --check origin/main...HEAD
 
 # Check public Kotlin ABI against the committed reference dump.
 # Run this explicitly; do not assume :pickers:check covers the ABI gate.
-./gradlew :pickers:checkLegacyAbi --no-daemon
+./gradlew :pickers:checkKotlinAbi --no-daemon
 
 # Update the Kotlin ABI reference dump after an intentional public API change
-./gradlew :pickers:updateLegacyAbi --no-daemon
+./gradlew :pickers:updateKotlinAbi --no-daemon
 
 # Verify sample app compilation
 ./gradlew :sample:compileKotlinDesktop --no-daemon
@@ -257,8 +258,8 @@ color = lerp(selectedTextStyle.color, textStyle.color, fraction)
 - Library Android component UI tests that do not need a real Activity/app journey → `pickers/src/androidUnitTest/kotlin/` with Robolectric
 - Library Android instrumented tests that must run on a device/emulator → `pickers/src/androidInstrumentedTest/kotlin/`
 - Sample Android smoke tests → `sample/src/androidInstrumentedTest/kotlin/`
-- Use `:pickers:testDebugUnitTest` or `:pickers:testReleaseUnitTest` for library Robolectric component UI tests. Use `:sample:assembleDebugAndroidTest` to verify sample Android test APK compilation/packaging. Use `:sample:pixel2Api35DebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect` for the Gradle Managed Device path used by CI; it requires Android Emulator, the API 35 AOSP ATD system image for the host architecture, and local virtualization/KVM. Use `:sample:connectedDebugAndroidTest` when a local device or emulator is already available. If managed-device prerequisites are unavailable locally, run `assembleDebugAndroidTest` or a managed-device `--dry-run` and rely on CI for the actual emulator run.
-- Public Kotlin API/ABI changes → run `:pickers:checkLegacyAbi`. If the API change is intentional and SemVer-appropriate, run `:pickers:updateLegacyAbi`, commit the updated `pickers/api/` dumps, and review preview/generated resource changes separately from supported picker/state API changes.
+- Use `:pickers:testDebugUnitTest` (or `:pickers:test`) for library Robolectric component UI tests; AGP 9 no longer registers a release unit test variant. Use `:sample:assembleDebugAndroidTest` to verify sample Android test APK compilation/packaging. Use `:sample:pixel2Api35DebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect` for the Gradle Managed Device path used by CI; it requires Android Emulator, the API 35 AOSP ATD system image for the host architecture, and local virtualization/KVM. Use `:sample:connectedDebugAndroidTest` when a local device or emulator is already available. If managed-device prerequisites are unavailable locally, run `assembleDebugAndroidTest` or a managed-device `--dry-run` and rely on CI for the actual emulator run.
+- Public Kotlin API/ABI changes → run `:pickers:checkKotlinAbi`. If the API change is intentional and SemVer-appropriate, run `:pickers:updateKotlinAbi`, commit the updated `pickers/api/` dumps, and review preview/generated resource changes separately from supported picker/state API changes.
 - Follow naming: `<ComponentName>Test.kt`, `<ComponentName>RobolectricTest.kt`, or `<ComponentName>AndroidTest.kt`
 
 ## Code Style
@@ -280,7 +281,7 @@ Follow **Semantic Versioning**: MAJOR.MINOR.PATCH
 ## CI/CD
 
 GitHub Actions workflows:
-- **`integration-build-test.yml`**: Manual-only (`workflow_dispatch`) hosted verification. PR automation is commented out because the full multiplatform/emulator matrix is slow. Prefer local gates first: `git diff --check origin/main...HEAD`, targeted Gradle tests, `checkLegacyAbi` for public API changes, and sample compilation. Trigger the hosted workflow only when explicit hosted evidence is needed.
+- **`integration-build-test.yml`**: Manual-only (`workflow_dispatch`) hosted verification. PR automation is commented out because the full multiplatform/emulator matrix is slow. Prefer local gates first: `git diff --check origin/main...HEAD`, targeted Gradle tests, `checkKotlinAbi` for public API changes, and sample compilation. Trigger the hosted workflow only when explicit hosted evidence is needed.
 - **`maven-central-deploy.yml`**: Publishes releases to Maven Central
 
 Build matrix: Ubuntu latest for Android/Desktop/Wasm and macOS 14 for iOS, using JDK 17 (Temurin)

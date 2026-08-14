@@ -6,11 +6,38 @@ This project tracks notable user-facing and maintainer-facing changes here. The 
 
 ### Changed (Breaking)
 
+- Dropped the `iosX64` (Intel Mac simulator) target. Compose Multiplatform stopped publishing
+  `ios_x64` and `macos_x64` artifacts in `1.11.0`, so the library can no longer build that target.
+  The published iOS targets are now `iosArm64` (device) and `iosSimulatorArm64` (Apple Silicon
+  simulator), and `io.github.kez-lab:compose-pickers-iosx64` is no longer produced. iOS device
+  builds, App Store releases, and Apple Silicon simulator development are unaffected; only
+  consumers running the iOS simulator on an Intel Mac need to stay on `0.7.0`.
 - Renamed every public Kotlin package from `com.kez.picker` to
   `io.github.kezlab.compose.pickers`, including `date`, `time`, and `duration` subpackages.
   Android library namespaces, sample and benchmark application IDs, source paths, tests, and ABI
   reference dumps use the new namespace as well. No compatibility typealiases or deprecated old
   packages are provided: update all imports when moving to `0.8.0`.
+
+### Changed
+
+- Updated the build toolchain and dependencies to current stable releases: Kotlin `2.2.21` →
+  `2.4.10`, Compose Multiplatform `1.10.0-beta01` → `1.11.1`, Android Gradle plugin `8.13.0` →
+  `9.3.1`, Gradle `8.13` → `9.7.0`, and `compileSdk` `36` → `37` (`targetSdk` stays at `36`).
+  Library dependencies moved to `kotlinx-datetime 0.8.0`, `kotlinx-coroutines 1.11.0`, and
+  `kotlinx-collections-immutable 0.5.1`; tooling moved to `androidx.compose.ui` test artifacts
+  `1.12.0`, `activity-compose 1.13.0`, CMP `navigation-compose 2.9.2`, Compose Hot Reload `1.2.0`,
+  and `vanniktech maven-publish 0.37.0`. No supported picker or state API changed; the only
+  non-target ABI diff is the mangled name of internal `ComposableSingletons` lambdas, which now
+  include the root project name under the Kotlin 2.4 Compose compiler.
+- AGP 9 enables built-in Kotlin and its new DSL by default, but neither supports the
+  `org.jetbrains.kotlin.multiplatform` plugin combined with `com.android.library` /
+  `com.android.application`, which is how `:pickers` and `:sample` are structured. The build
+  therefore sets `android.builtInKotlin=false` and `android.newDsl=false` in `gradle.properties`.
+  Both flags are deprecated and slated for removal in AGP 10, so this needs revisiting once KMP
+  supports the AGP 9 DSL or the modules are restructured.
+- `:pickers:testReleaseUnitTest` no longer exists under AGP 9; `:pickers:testDebugUnitTest` (or
+  `:pickers:test`) is the Robolectric gate. `checkLegacyAbi` / `updateLegacyAbi` still work but are
+  deprecated aliases for `checkKotlinAbi` / `updateKotlinAbi`.
 
 ## 0.7.0 - 2026-08-09
 
