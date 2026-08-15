@@ -126,7 +126,16 @@ jobs:
             ${{ env.LIBRARY_MODULE }}:assembleRelease \
             ${{ env.LIBRARY_MODULE }}:testDebugUnitTest \
             ${{ env.SAMPLE_MODULE }}:assembleDebug \
+            :screenshot-tests:validateDebugScreenshotTest \
             --no-daemon
+
+      - name: Upload Compose screenshot test report
+        if: matrix.target == 'android' && always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: compose-screenshot-test-report
+          path: screenshot-tests/build/reports/screenshotTest/**
+          if-no-files-found: ignore
 
       # Android Managed Device Instrumented Test
       - name: Gradle Instrumented Test • Android managed device
