@@ -16,16 +16,35 @@ kotlin {
 
 android {
     namespace = "io.github.kezlab.compose.pickers.screenshots"
-    compileSdk = 35
+    // Keep this aligned with the other Android modules. Compose Multiplatform 1.11 resolves
+    // androidx.compose 1.12, which refuses to compile against anything older than API 37.
+    compileSdk = 37
 
     defaultConfig {
         minSdk = 24
     }
 
+    // Both this and android.experimental.enableScreenshotTest in gradle.properties are required:
+    // the plugin checks the project property when it is applied and this one when it configures
+    // the module. Removing either fails the build.
     experimentalProperties["android.experimental.enableScreenshotTest"] = true
 
     buildFeatures {
         compose = true
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    testOptions {
+        screenshotTests {
+            // Layoutlib antialiasing can differ by a hair between the machine that recorded a
+            // reference image and the machine that validates it. Allow 0.01% of pixels to differ
+            // so real visual regressions still fail while host noise does not.
+            imageDifferenceThreshold = 0.0001f
+        }
     }
 }
 
@@ -34,6 +53,14 @@ dependencies {
 
     screenshotTestImplementation(libs.screenshot.validation.api)
     screenshotTestImplementation(libs.compose.ui.tooling)
+    // @Preview itself comes from androidx; declare it instead of relying on a transitive path.
+    screenshotTestImplementation(libs.androidx.ui.tooling.preview)
     screenshotTestImplementation(libs.compose.material3)
     screenshotTestImplementation(libs.kotlinx.datetime)
+}
+
+// The screenshot plugin does not wire validation into `check`, which would leave the reference
+// images unguarded for anyone running the normal verification tasks.
+tasks.named("check") {
+    dependsOn("validateDebugScreenshotTest")
 }

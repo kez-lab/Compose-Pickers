@@ -170,6 +170,14 @@ Most logic lives in `commonMain`. Platform-specific code is minimal.
 # Check PR diff whitespace/conflict markers (same hygiene gate as CI)
 git diff --check origin/main...HEAD
 
+# Validate committed Compose preview screenshot references.
+# :screenshot-tests:check depends on this task.
+./gradlew :screenshot-tests:validateDebugScreenshotTest --no-daemon
+
+# Re-record screenshot references after an intentional visual change.
+# Review the diff first, and delete orphaned PNGs left behind by renamed previews.
+./gradlew :screenshot-tests:updateDebugScreenshotTest --no-daemon
+
 # Check public Kotlin ABI against the committed reference dump.
 # Run this explicitly; do not assume :pickers:check covers the ABI gate.
 ./gradlew :pickers:checkKotlinAbi --no-daemon
@@ -251,13 +259,15 @@ color = lerp(selectedTextStyle.color, textStyle.color, fraction)
 - Unit tests: picker states, date validation, picker index utility behavior, and date/time coercion behavior
 - Robolectric Android component UI tests: picker accessibility semantics for selected values, custom labels, state descriptions, state restoration, and higher-level picker forwarding
 - Sample Android instrumented smoke tests: home-screen example entry points and a representative navigation path
-- Missing: broader UI interaction tests, screenshot tests, and full TalkBack/readout validation
+- Compose preview screenshot tests in `:screenshot-tests`: one case per public picker plus dark theme, disabled, and large-font rendering
+- Missing: broader UI interaction tests and full TalkBack/readout validation
 
 **When adding tests**:
 - Unit tests → `pickers/src/commonTest/kotlin/`
 - Library Android component UI tests that do not need a real Activity/app journey → `pickers/src/androidUnitTest/kotlin/` with Robolectric
 - Library Android instrumented tests that must run on a device/emulator → `pickers/src/androidInstrumentedTest/kotlin/`
 - Sample Android smoke tests → `sample/src/androidInstrumentedTest/kotlin/`
+- Visual regression cases → `screenshot-tests/src/screenshotTest/kotlin/` (Android-only host module; the screenshot plugin does not support KMP modules, so never apply it to `:pickers` or `:sample`)
 - Use `:pickers:testDebugUnitTest` (or `:pickers:test`) for library Robolectric component UI tests; AGP 9 no longer registers a release unit test variant. Use `:sample:assembleDebugAndroidTest` to verify sample Android test APK compilation/packaging. Use `:sample:pixel2Api35DebugAndroidTest -Pandroid.testoptions.manageddevices.emulator.gpu=swiftshader_indirect` for the Gradle Managed Device path used by CI; it requires Android Emulator, the API 35 AOSP ATD system image for the host architecture, and local virtualization/KVM. Use `:sample:connectedDebugAndroidTest` when a local device or emulator is already available. If managed-device prerequisites are unavailable locally, run `assembleDebugAndroidTest` or a managed-device `--dry-run` and rely on CI for the actual emulator run.
 - Public Kotlin API/ABI changes → run `:pickers:checkKotlinAbi`. If the API change is intentional and SemVer-appropriate, run `:pickers:updateKotlinAbi`, commit the updated `pickers/api/` dumps, and review preview/generated resource changes separately from supported picker/state API changes.
 - Follow naming: `<ComponentName>Test.kt`, `<ComponentName>RobolectricTest.kt`, or `<ComponentName>AndroidTest.kt`
