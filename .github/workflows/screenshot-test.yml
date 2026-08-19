@@ -53,7 +53,7 @@ jobs:
       - name: Install Android build tools
         run: |
           sdkmanager "platform-tools" \
-                     "platforms;android-37" \
+                     "platforms;android-37.0" \
                      "build-tools;37.0.0"
           yes | sdkmanager --licenses
 
