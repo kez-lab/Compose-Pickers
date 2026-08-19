@@ -68,5 +68,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: compose-screenshot-test-report
-          path: screenshot-tests/build/reports/screenshotTest/**
+          # The HTML report links to the rendered and diff images, which live
+          # under build/outputs, so upload both or the report is unreadable.
+          path: |
+            screenshot-tests/build/reports/screenshotTest/**
+            screenshot-tests/build/outputs/screenshotTest-results/**
           if-no-files-found: ignore
