@@ -28,8 +28,8 @@ permissions:
 
 jobs:
   screenshot-validation:
-    name: Linux • Compose screenshot validation
-    runs-on: ubuntu-latest
+    name: macOS • Compose screenshot validation
+    runs-on: macos-14
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
