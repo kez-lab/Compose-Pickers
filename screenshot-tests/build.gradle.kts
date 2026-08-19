@@ -16,8 +16,9 @@ kotlin {
 
 android {
     namespace = "io.github.kezlab.compose.pickers.screenshots"
-    // Keep this aligned with the other Android modules. Compose Multiplatform 1.11 resolves
-    // androidx.compose 1.12, which refuses to compile against anything older than API 37.
+    // Keep this aligned with the other Android modules, which compile against 37. Anything
+    // older fails the AAR metadata check: :pickers and the androidx Compose artifacts on the
+    // screenshotTest classpath both declare a minimum compileSdk of 37.
     compileSdk = 37
 
     defaultConfig {

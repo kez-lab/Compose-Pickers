@@ -61,5 +61,6 @@ does not fail the build. Real visual regressions are far larger than that.
 Reference images are rendered by layoutlib against the module's `compileSdk`, and text is rendered
 with the fonts from that SDK platform's directory. Expect to re-record baselines — deliberately,
 after reviewing the diff — when `compileSdk`, the Compose version, or the screenshot plugin version
-changes. `compileSdk` must also stay aligned with the other Android modules: Compose Multiplatform
-1.11 resolves androidx.compose 1.12, which refuses to compile against anything older than API 37.
+changes. `compileSdk` must also stay aligned with the other Android modules, which compile against
+37; anything older fails the AAR metadata check, because `:pickers` and the androidx Compose
+artifacts on the `screenshotTest` classpath both declare a minimum `compileSdk` of 37.

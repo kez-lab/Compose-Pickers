@@ -41,7 +41,7 @@ import kotlin.time.Duration.Companion.minutes
 private const val PICKER_WIDTH_DP = 360
 private const val PICKER_HEIGHT_DP = 260
 
-/** Feb 2024 is a leap month, so the day column must offer 29 and stop there. */
+/** 2024 is a leap year, so February has 29 days: the day column must offer 29 and stop there. */
 private val LEAP_DAY = LocalDate(2024, 2, 29)
 
 @PreviewTest
@@ -51,7 +51,7 @@ private val LEAP_DAY = LocalDate(2024, 2, 29)
     heightDp = PICKER_HEIGHT_DP
 )
 @Composable
-fun DatePickerScreenshot() {
+private fun DatePickerScreenshot() {
     PickerScreenshotTheme {
         DatePicker(
             state = rememberDatePickerState(initialDate = LEAP_DAY),
@@ -68,7 +68,7 @@ fun DatePickerScreenshot() {
     uiMode = Configuration.UI_MODE_NIGHT_YES
 )
 @Composable
-fun DatePickerDarkScreenshot() {
+private fun DatePickerDarkScreenshot() {
     PickerScreenshotTheme {
         DatePicker(
             state = rememberDatePickerState(initialDate = LEAP_DAY),
@@ -84,7 +84,7 @@ fun DatePickerDarkScreenshot() {
     heightDp = PICKER_HEIGHT_DP
 )
 @Composable
-fun DatePickerDisabledScreenshot() {
+private fun DatePickerDisabledScreenshot() {
     PickerScreenshotTheme {
         DatePicker(
             state = rememberDatePickerState(initialDate = LEAP_DAY),
@@ -102,7 +102,7 @@ fun DatePickerDisabledScreenshot() {
     fontScale = 1.5f
 )
 @Composable
-fun DatePickerLargeFontScreenshot() {
+private fun DatePickerLargeFontScreenshot() {
     PickerScreenshotTheme {
         DatePicker(
             state = rememberDatePickerState(initialDate = LEAP_DAY),
@@ -118,7 +118,7 @@ fun DatePickerLargeFontScreenshot() {
     heightDp = PICKER_HEIGHT_DP
 )
 @Composable
-fun TimePickerScreenshot() {
+private fun TimePickerScreenshot() {
     PickerScreenshotTheme {
         TimePicker(
             state = rememberTimePickerState(
@@ -138,7 +138,7 @@ fun TimePickerScreenshot() {
     heightDp = PICKER_HEIGHT_DP
 )
 @Composable
-fun TimePicker24HourScreenshot() {
+private fun TimePicker24HourScreenshot() {
     PickerScreenshotTheme {
         TimePicker(
             state = rememberTimePickerState(
@@ -158,7 +158,7 @@ fun TimePicker24HourScreenshot() {
     heightDp = PICKER_HEIGHT_DP
 )
 @Composable
-fun YearMonthPickerScreenshot() {
+private fun YearMonthPickerScreenshot() {
     PickerScreenshotTheme {
         YearMonthPicker(
             state = rememberYearMonthPickerState(initialYearMonth = YearMonth(2024, 6)),
@@ -174,7 +174,7 @@ fun YearMonthPickerScreenshot() {
     heightDp = PICKER_HEIGHT_DP
 )
 @Composable
-fun DurationPickerScreenshot() {
+private fun DurationPickerScreenshot() {
     PickerScreenshotTheme {
         DurationPicker(
             state = rememberDurationPickerState(initialDuration = 2.hours + 30.minutes),
@@ -192,7 +192,7 @@ fun DurationPickerScreenshot() {
     heightDp = 520
 )
 @Composable
-fun DateRangePickerScreenshot() {
+private fun DateRangePickerScreenshot() {
     PickerScreenshotTheme {
         DateRangePicker(
             state = rememberDateRangePickerState(
